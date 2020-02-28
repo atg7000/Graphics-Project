@@ -60,8 +60,31 @@
           var myGround = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1024, height: 1024}, scene);
           var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
           groundMaterial.backFaceCulling = false;
-          groundMaterial.ambientTexture = new BABYLON.Texture("https://www.dropbox.com/s/v53b3e8y3gv2hbn/marioKartTrack.png?dl=0", scene);
+          // groundMaterial.ambientTexture = new BABYLON.Texture("https://github.com/atg7000/Graphics-Project/blob/master/media/marioKartTrack.png", scene);
+          groundMaterial.ambientTexture = new BABYLON.Texture("http://www.hpgreenvivarium.com/wp-content/uploads/2020/02/marioKartTrack.png", scene);
           myGround.material = groundMaterial;
+
+
+          // X Y Z Axis
+          function setupOrientationLines() {
+              // red
+              let xLine = BABYLON.MeshBuilder.CreateLines("xLine", {
+                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(256, 0.01, 0) ],
+                  colors: [new BABYLON.Color4(1, 0, 0, 1), new BABYLON.Color4(1, 0, 0, 1)]
+              }, scene);
+              // green
+              let yLine = BABYLON.MeshBuilder.CreateLines("yLine", {
+                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(0, 256.01, 0) ],
+                  colors: [new BABYLON.Color4(0, 1, 0, 1), new BABYLON.Color4(0, 1, 0, 1)]
+              }, scene);
+              // blue
+              let zLine = BABYLON.MeshBuilder.CreateLines("zLine", {
+                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(0, 0.01, 256) ],
+                  colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)]
+              }, scene);
+          }
+
+          setupOrientationLines();
 
         	return scene;
         };
