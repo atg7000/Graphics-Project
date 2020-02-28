@@ -61,9 +61,15 @@
           var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
           groundMaterial.backFaceCulling = false;
           //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.hpgreenvivarium.com/wp-content/uploads/2020/02/marioKartTrack.png", scene);
-          //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
+          groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
           myGround.material = groundMaterial;
 
+        /******* Creating the side blocks ******/
+        var redBox = BABYLON.MeshBuilder.CreateBox("redBox", {size: 8.0}, scene);
+        redBox.position = new BABYLON.Vector3(-508,4,508);
+        var redMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+        redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+        redBox.material = redMaterial;
 
           // X Y Z Axis
           function setupOrientationLines() {
@@ -83,7 +89,6 @@
                   colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)]
               }, scene);
           }
-
           setupOrientationLines();
 
         	return scene;
