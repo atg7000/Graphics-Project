@@ -64,13 +64,22 @@
           groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
           myGround.material = groundMaterial;
 
-        /******* Creating the side blocks ******/
-        var redBox = BABYLON.MeshBuilder.CreateBox("redBox", {size: 8.0}, scene);
-        redBox.position = new BABYLON.Vector3(-508,4,508);
-        var redMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-        redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-        redBox.material = redMaterial;
+          /******* Creating the side blocks ******/
+          var redBox = BABYLON.MeshBuilder.CreateBox("redBox", {size: 8.0}, scene);
+          redBox.position = new BABYLON.Vector3(-508,4,508);
+          var redMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+          redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+          redBox.material = redMaterial;
 
+            /******* PositiveZ Walls ******/
+            var boxName = "redBox";
+            for (let i = -508; i < 508; i += 128) {
+              for (let j = i; j < (i + 32); j += 8) {
+                console.log(j);
+                var boxLocation = i + j;
+                eval('var ' + boxName + boxLocation + '= ' + 'BABYLON.MeshBuilder.CreateBox(\"' + boxName + boxLocation + '\", {size: 8.0}, scene);');
+              }
+            }
           // X Y Z Axis
           function setupOrientationLines() {
               // red
