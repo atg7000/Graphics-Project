@@ -65,21 +65,73 @@
           myGround.material = groundMaterial;
 
           /******* Creating the side blocks ******/
-          var redBox = BABYLON.MeshBuilder.CreateBox("redBox", {size: 8.0}, scene);
-          redBox.position = new BABYLON.Vector3(-508,4,508);
-          var redMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-          redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-          redBox.material = redMaterial;
+
+            /******* Materials for boxes ******/
+            var redMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
+            redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+
+            var greenMaterial = new BABYLON.StandardMaterial("greenMaterial", scene);
+            greenMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
+
+            var yellowMaterial = new BABYLON.StandardMaterial("yellowMaterial", scene);
+            yellowMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+
+            var blueMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
+            blueMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
 
             /******* PositiveZ Walls ******/
-            var boxName = "redBox";
-            for (let i = -508; i < 508; i += 128) {
-              for (let j = i; j < (i + 32); j += 8) {
-                console.log(j);
-                var boxLocation = i + j;
-                eval('var ' + boxName + boxLocation + '= ' + 'BABYLON.MeshBuilder.CreateBox(\"' + boxName + boxLocation + '\", {size: 8.0}, scene);');
+
+              // Red Boxes
+              var redBoxName = "redBox";
+              for (let i = -508; i < 508; i += 128) {
+                for (let j = i; j < (i + 32); j += 8) {
+                  console.log(j);
+                  var boxName2 = j.toString();
+                  var boxName3 = boxName2.replace("-","Negative");
+                  var boxName = redBoxName.concat(boxName3);
+                  eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("redBox", {size: 8.0}, scene);');
+                  eval(boxName + '.position = new BABYLON.Vector3(' + j + ',4,508);');
+                  eval(boxName + '.material = redMaterial');
+                  console.log(boxName);
+                }
               }
-            }
+              // Green Boxes
+              var greenBoxName = "greenBox";
+              for (let i = -476; i < 508; i += 128) {
+                for (let j = i; j < (i + 32); j += 8) {
+                  var boxName2 = j.toString();
+                  var boxName3 = boxName2.replace("-","Negative");
+                  var boxName = greenBoxName.concat(boxName3);
+                  eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("greenBox", {size: 8.0}, scene);');
+                  eval(boxName + '.position = new BABYLON.Vector3(' + j + ',4,508);');
+                  eval(boxName + '.material = greenMaterial');
+                }
+              }
+              // Yellow Boxes
+              var yellowBoxName = "yellowBox";
+              for (let i = -444; i < 508; i += 128) {
+                for (let j = i; j < (i + 32); j += 8) {
+                  var boxName2 = j.toString();
+                  var boxName3 = boxName2.replace("-","Negative");
+                  var boxName = yellowBoxName.concat(boxName3);
+                  eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("yellowBox", {size: 8.0}, scene);');
+                  eval(boxName + '.position = new BABYLON.Vector3(' + j + ',4,508);');
+                  eval(boxName + '.material = yellowMaterial');
+                }
+              }
+              // Blue Boxes
+              var blueBoxName = "blueBox";
+              for (let i = -412; i < 508; i += 128) {
+                for (let j = i; j < (i + 32); j += 8) {
+                  var boxName2 = j.toString();
+                  var boxName3 = boxName2.replace("-","Negative");
+                  var boxName = blueBoxName.concat(boxName3);
+                  eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("blueBox", {size: 8.0}, scene);');
+                  eval(boxName + '.position = new BABYLON.Vector3(' + j + ',4,508);');
+                  eval(boxName + '.material = blueMaterial');
+                }
+              }
+
           // X Y Z Axis
           function setupOrientationLines() {
               // red
