@@ -237,8 +237,9 @@
                   }
                   // Green Boxes
                   var greenBoxName = "greenBox";
-                  for (let i = (startPosition + offset); i > endPosition; i += increment) {
+                  for (let i = (startPosition - offset); i > endPosition; i += increment) {
                     for (let j = i; j > (i - 32); j -= 8) {
+                      console.log("J =",j,"; direction = ",direction);
                       var boxNameJ = j.toString();
                       if(constAxis == 'x') {
                         z = j;
@@ -255,12 +256,14 @@
                       eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("greenBox", {size: 8.0}, scene);');
                       eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                       eval(boxName + '.material = greenMaterial');
+                      console.log(boxName);
                     }
                   }
                   // Yellow Boxes
                   var yellowBoxName = "yellowBox";
-                  for (let i = (startPosition + offset * 2); i > endPosition; i += increment) {
+                  for (let i = (startPosition - offset * 2); i > endPosition; i += increment) {
                     for (let j = i; j > (i - 32); j -= 8) {
+                      console.log("J =",j,"; direction = ",direction);
                       var boxNameJ = j.toString();
                       if(constAxis == 'x') {
                         z = j;
@@ -277,12 +280,14 @@
                       eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("yellowBox", {size: 8.0}, scene);');
                       eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                       eval(boxName + '.material = yellowMaterial');
+                      console.log(boxName);
                     }
                   }
                   // Blue Boxes
                   var blueBoxName = "blueBox";
-                  for (let i = (startPosition + offset * 3); i > endPosition; i += increment) {
+                  for (let i = (startPosition - offset * 3); i > endPosition; i += increment) {
                     for (let j = i; j > (i - 32); j -= 8) {
+                      console.log("J =",j,"; direction = ",direction);
                       var boxNameJ = j.toString();
                       if(constAxis == 'x') {
                         z = j;
@@ -299,6 +304,7 @@
                       eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("blueBox", {size: 8.0}, scene);');
                       eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                       eval(boxName + '.material = blueMaterial');
+                      console.log(boxName);
                     }
                   }
                 }
