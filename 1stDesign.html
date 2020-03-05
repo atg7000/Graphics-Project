@@ -51,7 +51,7 @@
         	var scene = new BABYLON.Scene(engine);
 
         	//var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
-          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(300, 500, -700), scene);
+          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-900, 500, -500), scene);
           //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
         	camera.attachControl(canvas, true);
           camera.speed = 50;
@@ -133,6 +133,24 @@
               createBoxLine("redBox",-260,324,-228,'z');
               // Turn 3 - 2
               createBoxLine("yellowBox",-228,-240,332,'x');
+              createBoxLine("blueBox",-244,-300,332,'x');
+              // Turn 2 straight
+              createBoxLine("greenBox",332,204,-308,'z');
+              // 1st spill right
+              createBoxLine("greenBox",-308,-252,196,'x');
+              // 1st spill straight
+              createBoxLine("blueBox",188,-180,-252,'z');
+              // 2nd spill left
+              createBoxLine("yellowBox",-252,-260,-188,'x');
+              createBoxLine("blueBox",-268,-324,-188,'x');
+              createBoxLine("greenBox",-332,-340,-188,'x');
+              // Turn 1 flat
+              createBoxLine("greenBox",-196,-204,-340,'z');
+              createBoxLine("yellowBox",-212,-332,-340,'z');
+              // Turn 1 spike
+              createBoxLine("redBox",-348,-404,-268,'x');
+              createBoxLine("yellowBox",-404,-348,-276,'x');
+              // 
             }
 
             /******* Create walls Function ******/
