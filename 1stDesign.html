@@ -101,6 +101,13 @@
             createBoxLine("blueBox",196,220,180,'z');
             // Turn 4 straight
             createBoxLine("redBox",180,324,228,'x');
+            // Roundabout top
+            createBoxLine("redBox",228,236,324,'z');
+            createBoxLine("greenBox",244,332,324,'z');
+            // Roundabout side
+            createBoxLine("redBox",316,164,332,'x');
+            // Roundabout bottom
+            createBoxLine("greenBox",332,212,156,'z');
 
             /******* Create walls Function ******/
             function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
@@ -155,7 +162,7 @@
                       eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
                       eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                       eval(boxName + '.material = ' + boxColorTexture);
-                      console.log(boxName);
+                      // console.log(boxName);
                     }
                   }
                   // setting boxColor increment
@@ -190,7 +197,7 @@
                       eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
                       eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                       eval(boxName + '.material = ' + boxColorTexture);
-                      console.log(boxName);
+                      // console.log(boxName);
                     }
                   }
                   // setting boxColor increment
