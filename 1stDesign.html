@@ -82,32 +82,38 @@
             blueBoxMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
 
             /******* Walls ******/
+            createWalls();
 
-            // Outside Walls
-            createBoxLine("redBox",-508,508,508,'z');
-            createBoxLine("redBox",508,-508,508,'x');
-            createBoxLine("redBox",508,-508,-508,'z');
-            createBoxLine("redBox",-508,508,-508,'x');
-            // Final Turn Straight
-            createBoxLine("yellowBox",-340,-244,348,'z');
-            // Turn 5 left
-            createBoxLine("greenBox",348,132,-244,'x');
-            // Turn 5 - 4 straight
-            createBoxLine("redBox",-236,156,132,'z');
-            // Turn 4 jagged
-            createBoxLine("redBox",140,148,156,'x');
-            createBoxLine("greenBox",156,180,156,'z');
-            createBoxLine("yellowBox",156,180,188,'x');
-            createBoxLine("blueBox",196,220,180,'z');
-            // Turn 4 straight
-            createBoxLine("redBox",180,324,228,'x');
-            // Roundabout top
-            createBoxLine("redBox",228,236,324,'z');
-            createBoxLine("greenBox",244,332,324,'z');
-            // Roundabout side
-            createBoxLine("redBox",316,164,332,'x');
-            // Roundabout bottom
-            createBoxLine("greenBox",332,212,156,'z');
+            function createWalls() {
+              // Outside Walls
+              createBoxLine("redBox",-508,508,508,'z');
+              createBoxLine("redBox",508,-508,508,'x');
+              createBoxLine("redBox",508,-508,-508,'z');
+              createBoxLine("redBox",-508,508,-508,'x');
+              // Final Turn Straight
+              createBoxLine("yellowBox",-340,-244,348,'z');
+              // Turn 5 left
+              createBoxLine("greenBox",348,132,-244,'x');
+              // Turn 5 - 4 straight
+              createBoxLine("redBox",-236,156,132,'z');
+              // Turn 4 jagged
+              createBoxLine("redBox",140,148,156,'x');
+              createBoxLine("greenBox",156,180,156,'z');
+              createBoxLine("yellowBox",156,180,188,'x');
+              createBoxLine("blueBox",196,220,180,'z');
+              // Turn 4 straight
+              createBoxLine("redBox",180,324,228,'x');
+              // Roundabout top
+              createBoxLine("redBox",228,236,324,'z');
+              createBoxLine("greenBox",244,332,324,'z');
+              // Roundabout side
+              createBoxLine("redBox",316,164,332,'x');
+              // Roundabout bottom
+              createBoxLine("greenBox",332,212,156,'z');
+              // Tiled jagged right
+              createBoxLine("greenBox",148,140,212,'x');
+              createBoxLine("greenBox",212,204,132,'z');
+            }
 
             /******* Create walls Function ******/
             function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
@@ -211,7 +217,7 @@
             }
 
           /******* Create Finish Line ******/
-          // createBoxLine(-468,-388,84,'z');
+          // createBoxLine("redBox",-468,-388,84,'z');
 
           // X Y Z Axis
           function setupOrientationLines() {
