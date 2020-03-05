@@ -51,10 +51,11 @@
         	var scene = new BABYLON.Scene(engine);
 
         	//var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
-          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 200, -100), scene);
+          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(300, 500, -700), scene);
           //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
         	camera.attachControl(canvas, true);
           camera.speed = 50;
+          camera.setTarget(BABYLON.Vector3.Zero());
 
         	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
 
@@ -119,6 +120,19 @@
               // Tilted Straight straight
               createBoxLine("blueBox",172,164,108,'z');
               createBoxLine("redBox",156,-36,108,'z');
+              createBoxLine("yellowBox",100,84,-36,'x');
+              createBoxLine("blueBox",-44,-244,84,'z');
+              // Hairpin Straight
+              createBoxLine("greenBox",76,68,-244,'x');
+              createBoxLine("yellowBox",60,-44,-244,'x');
+              createBoxLine("greenBox",-244,-252,-52,'z');
+              createBoxLine("yellowBox",-260,-268,-52,'z');
+              createBoxLine("yellowBox",-60,-68,-268,'x');
+              createBoxLine("blueBox",-76,-228,-268,'x');
+              // Straight Straight
+              createBoxLine("redBox",-260,324,-228,'z');
+              // Turn 3 - 2
+              createBoxLine("yellowBox",-228,-240,332,'x');
             }
 
             /******* Create walls Function ******/
