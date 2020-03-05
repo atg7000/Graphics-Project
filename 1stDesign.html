@@ -88,12 +88,19 @@
             createBoxLine("redBox",508,-508,508,'x');
             createBoxLine("redBox",508,-508,-508,'z');
             createBoxLine("redBox",-508,508,-508,'x');
-            // Turn 4 - 5 straight
-            createBoxLine("redBox",-244,160,132,'z');
-            // Turn 5 left
-            createBoxLine("redBox",348,132,-244,'x');
             // Final Turn Straight
-            createBoxLine("redBox",-340,-244,348,'z');
+            createBoxLine("yellowBox",-340,-244,348,'z');
+            // Turn 5 left
+            createBoxLine("greenBox",348,132,-244,'x');
+            // Turn 5 - 4 straight
+            createBoxLine("redBox",-236,156,132,'z');
+            // Turn 4 jagged
+            createBoxLine("redBox",140,148,156,'x');
+            createBoxLine("greenBox",156,180,156,'z');
+            createBoxLine("yellowBox",156,180,188,'x');
+            createBoxLine("blueBox",196,220,180,'z');
+            // Turn 4 straight
+            createBoxLine("redBox",180,324,228,'x');
 
             /******* Create walls Function ******/
             function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
@@ -129,7 +136,7 @@
                   var boxColorName = names[boxColor];
                   var boxColorTexture = boxColorName.concat("Material");
                   // loop for all boxes of color in range
-                  for (let i = startPosition + offset * a; i < endPosition; i += increment) {
+                  for (let i = startPosition + offset * a; i <= endPosition; i += increment) {
                     // loop for each individual box
                     for (let j = i; (j < (i + 32)) && (j <= endPosition); j += 8) {
                       var boxNameJ = j.toString();
@@ -164,7 +171,7 @@
                   var boxColorName = names[boxColor];
                   var boxColorTexture = boxColorName.concat("Material");
                   // loop for all boxes of color in range
-                  for (let i = startPosition - offset * a; i > endPosition; i += increment) {
+                  for (let i = startPosition - offset * a; i >= endPosition; i += increment) {
                     // loop for each individual box
                     for (let j = i; (j > (i - 32)) && (j >= endPosition); j -= 8) {
                       var boxNameJ = j.toString();
