@@ -51,7 +51,7 @@
         	var scene = new BABYLON.Scene(engine);
 
         	//var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
-          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(500, 500,-500), scene);
+          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-500, 500,-500), scene);
           //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
         	camera.attachControl(canvas, true);
           camera.speed = 50;
@@ -60,13 +60,15 @@
         	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
 
           // ground
-          // createGround();
+          createGround();
           function createGround() {
             var myGround = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1024, height: 1024}, scene);
             var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
             groundMaterial.backFaceCulling = false;
             //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.hpgreenvivarium.com/wp-content/uploads/2020/02/marioKartTrack.png", scene);
-            groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
+            //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
+            //groundMaterial.ambientTexture = new BABYLON.Texture("file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
+            groundMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
             myGround.material = groundMaterial;
           }
 
@@ -86,7 +88,7 @@
             blueBoxMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
 
             /******* Walls ******/
-            //createWalls();
+            // createWalls();
 
             /******* Create walls Functions ******/
             function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
@@ -329,14 +331,59 @@
             }
 
           /******* Trees ******/
-          createTrees();
+          // createTrees();
           function createTrees() {
-            var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
-            for (var i = 0; i < 2000; i++) {
+            //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
+            var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
+            // Trees in long rectangle
+            for (var i = 0; i < 10; i++) {
               var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
-              tree.position.x = Math.random() * 100 - 50;
-              tree.position.z = Math.random() * 100 - 50;
+              tree.position.x = Math.random() * (-330 + 280) - 280;
+              tree.position.y = 25;
+              tree.position.z = Math.random() * (330 + 320) - 320;
               tree.isPickable = true;
+              tree.size = 50;
+              console.log(Math.random());
+            }
+            // Trees in fat side box
+            for (var i = 0; i < 5; i++) {
+              var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
+              tree.position.x = Math.random() * (40 + 40) - 40;
+              tree.position.y = 25;
+              tree.position.z = Math.random() * (500 - 300) + 300;
+              tree.isPickable = true;
+              tree.size = 50;
+              console.log(Math.random());
+            }
+            // Trees in positive box
+            for (var i = 0; i < 5; i++) {
+              var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
+              tree.position.x = Math.random() * (320 - 240) + 240;
+              tree.position.y = 25;
+              tree.position.z = Math.random() * (310 - 170) + 170;
+              tree.isPickable = true;
+              tree.size = 50;
+              console.log(Math.random());
+            }
+            // Trees in skinny side box
+            for (var i = 0; i < 5; i++) {
+              var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
+              tree.position.x = Math.random() * (500 - 300) + 300;
+              tree.position.y = 25;
+              tree.position.z = Math.random() * (20 + 30) - 30;
+              tree.isPickable = true;
+              tree.size = 50;
+              console.log(Math.random());
+            }
+            // Trees in skinny middle box
+            for (var i = 0; i < 5; i++) {
+              var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
+              tree.position.x = Math.random() * (320 - 210) + 210;
+              tree.position.y = 25;
+              tree.position.z = Math.random() * (-240 + 290) - 290;
+              tree.isPickable = true;
+              tree.size = 50;
+              console.log(Math.random());
             }
           }
 
