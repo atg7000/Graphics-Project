@@ -260,18 +260,8 @@
                   var flag1 = true,flag2 = true;
                   // loop for all boxes of color in range
                   for (let i = startPosition + offset * a; i < endPosition; i += increment) {
-                    if(startPosition > endPosition) {
-                      flag1 = i > endPosition;
-                    } else {
-                      flag1 = i < endPosition;
-                    }
                     // loop for each individual box
                     for (let j = i; (j < (i + 32)) && (j <= endPosition); j += 8) {
-                      if(startPosition > endPosition) {
-                        flag2 = (j > (i + 32)) && (j >= endPosition);
-                      } else {
-                        flag2 = (j < (i + 32)) && (j <= endPosition);
-                      }
                       var boxNameJ = j.toString();
                       if(constAxis == 'x') {
                         z = j;
@@ -337,7 +327,7 @@
             }
 
           /******* Create Finish Line ******/
-          // createBoxLine("redBox",-468,-388,84,'z');
+          createBoxLine("redBox",-468,-396,84,'z');
 
           // X Y Z Axis
           function setupOrientationLines() {
