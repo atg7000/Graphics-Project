@@ -51,11 +51,12 @@
         	var scene = new BABYLON.Scene(engine);
 
         	//var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
-          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-500, 500,-500), scene);
+          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-300,100,50), scene);
           //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
         	camera.attachControl(canvas, true);
-          camera.speed = 50;
-          camera.setTarget(BABYLON.Vector3.Zero());
+          camera.speed = 25;
+          // camera.setTarget(BABYLON.Vector3.Zero());
+          camera.setTarget(new BABYLON.Vector3(-480,20,133));
 
         	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
 
@@ -73,7 +74,7 @@
           }
 
           /******* Creating Wall Blocks ******/
-          // createWalls();
+          //createWalls();
           function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
 
             // Setting variables
@@ -324,7 +325,7 @@
           }
 
           /******* Trees ******/
-          // createTrees();
+          //createTrees();
           function createTrees() {
             //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
@@ -427,10 +428,103 @@
           }
 
           /******* Create SkyBox ******/
-          createSkyBox();
+          //createSkyBox();
           function createSkyBox() {
-            
+            console.log("it gets here");
+            scene.clearColor = new BABYLON.Color3(0.9, 0.9, 0.3);
+            var skyBox = BABYLON.Mesh.CreateBox("skyBox", 2000, scene);
+            var skyBoxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyBoxMaterial.backFaceCulling = false;
+            skyBoxMaterial.reflectionTexture = new BABYLON.CubeTexture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/skyBox/sky", scene);
+            skyBoxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skyBoxMaterial.disableLighting = true;
+            skyBox.material = skyBoxMaterial;
+            // skyBox.infiniteDistance = true;
+            skyBox.renderingGroupId = 0;
           }
+
+          /******* Create Cheering People ******/
+          createCrowd();
+          function createCrowd() {
+            createPeople();
+            createBleachers();
+            function createPeople() {
+              var mat = new BABYLON.StandardMaterial("mat1", scene);
+              mat.alpha = 1.0;
+              mat.diffuseColor = new BABYLON.Color3(1, 1, 1);
+              mat.specularColor = new BABYLON.Color3(1, 1, 1);
+              mat.ambientColor = new BABYLON.Color3(1, 1, 1);
+              //mat.backFaceCulling = false;
+              var texture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/man.png", scene);
+              mat.diffuseTexture = texture;
+
+              var hSpriteNb =  7;  // 7 sprites per raw
+              var vSpriteNb =  1;  // 1 sprite raws
+
+              var faceUV = new Array(6);
+
+              for (var i = 0; i < 6; i++) {
+            	  faceUV[i] = new BABYLON.Vector4(0, 0, 0, 0);
+              }
+
+              faceUV[1] = new BABYLON.Vector4(0, 0, 1 / hSpriteNb, 1 / vSpriteNb);
+
+              var options = {
+                width: 6,
+                height: 8,
+                depth: 3,
+                faceUV: faceUV
+              };
+              for(let x = -480, y = 4; x >= -486; x -=3, y +=8) {
+                for(let z = 133; z <= 175; z += 6) {
+                  var box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
+                  box.material = mat;
+                  box.position = new BABYLON.Vector3(x,y,z);
+                  box.rotation = new BABYLON.Vector3(0, Math.PI*3/2, 0);
+                }
+              }
+
+             scene.registerBeforeRender(function() {
+            	 texture.uOffset += 1/7;
+             });
+           }
+           function createBleachers() {
+             var bleacherMaterial1 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+             var bleacherMaterial2 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+             var bleacherMaterial3 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+             var bleacherMaterial4 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+             bleacherMaterial1.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+             bleacherMaterial2.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
+             bleacherMaterial3.diffuseColor = new BABYLON.Color3(1, 1, 0);
+             bleacherMaterial4.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
+
+             var bleacherBoxTallLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallLeft", {height: 24, width: 3, depth: 3}, scene);
+             bleacherBoxTallLeft.position = new BABYLON.Vector3(-486,12,128.5);
+             bleacherBoxTallLeft.material = bleacherMaterial1;
+             var bleacherBoxMediumLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxMediumLeft", {height: 16, width: 3, depth: 3}, scene);
+             bleacherBoxMediumLeft.position = new BABYLON.Vector3(-483,8,128.5);
+             bleacherBoxMediumLeft.material = bleacherMaterial2;
+             var bleacherBoxShortLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortLeft", {height: 8, width: 3, depth: 3}, scene);
+             bleacherBoxShortLeft.position = new BABYLON.Vector3(-480,4,128.5);
+             bleacherBoxShortLeft.material = bleacherMaterial3;
+
+             var bleacherBoxTallRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 24, width: 3, depth: 3}, scene);
+             bleacherBoxTallRight.position = new BABYLON.Vector3(-486,12,179.5);
+             bleacherBoxTallRight.material = bleacherMaterial1;
+             var bleacherBoxMediumRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxMediumRight", {height: 16, width: 3, depth: 3}, scene);
+             bleacherBoxMediumRight.position = new BABYLON.Vector3(-483,8,179.5);
+             bleacherBoxMediumRight.material = bleacherMaterial2;
+             var bleacherBoxShortRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortRight", {height: 8, width: 3, depth: 3}, scene);
+             bleacherBoxShortRight.position = new BABYLON.Vector3(-480,4,179.5);
+             bleacherBoxShortRight.material = bleacherMaterial3;
+
+             var bleacherBoxTop = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 3, width: 54, depth: 3}, scene);
+             bleacherBoxTop.position = new BABYLON.Vector3(-486,25.5,154);
+             bleacherBoxTop.rotation = new BABYLON.Vector3(0, Math.PI/2, 0);
+             bleacherBoxTop.material = bleacherMaterial4;
+           }
+          }
+
 
           // X Y Z Axis
           function setupOrientationLines() {
@@ -451,7 +545,9 @@
               }, scene);
           }
           setupOrientationLines();
-
+          // help with sprites found here
+          // https://doc.babylonjs.com/how_to/createbox_per_face_textures_and_colors
+          // https://www.babylonjs-playground.com/#1V3CAT#171
         	return scene;
         };
         /******* End of the create scene function ******/
