@@ -59,7 +59,7 @@
 
         	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
 
-          // ground
+          /******* Creating Ground ******/
           createGround();
           function createGround() {
             var myGround = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1024, height: 1024}, scene);
@@ -73,262 +73,255 @@
           }
 
           /******* Creating Wall Blocks ******/
+          // createWalls();
+          function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
 
-            /******* Materials for boxes ******/
+            // Setting variables
+            var x = 0, y = 4, z = 0;
+            var offset = 32;
+            var increment = 128;
+            var direction = true;
+            var names = ["redBox","greenBox","yellowBox","blueBox"];
+            var boxColor = names.indexOf(startBox);
+
+            // Setting Materials
             var redBoxMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
             redBoxMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-
             var greenBoxMaterial = new BABYLON.StandardMaterial("greenMaterial", scene);
             greenBoxMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
-
             var yellowBoxMaterial = new BABYLON.StandardMaterial("yellowMaterial", scene);
             yellowBoxMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
-
             var blueBoxMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
             blueBoxMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
 
-            /******* Walls ******/
-            // createWalls();
+            // Setting direction
+            if (startPosition > endPosition) {
+              increment = -128;
+              direction = false;
+            } else {
+              increment = 128;
+              direction = true;
+            }
 
-            /******* Create walls Functions ******/
-            function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
+            // Setting the constant axis
+            if(constAxis == "x") {
+              x = constPosition;
+            } else if(constAxis == "z") {
+              z = constPosition;
+            }
 
-              // Setting variables
-              var x = 0, y = 4, z = 0;
-              var offset = 32;
-              var increment = 128;
-              var direction = true;
-              var names = ["redBox","greenBox","yellowBox","blueBox"];
-              var boxColor = names.indexOf(startBox);
-
-              // Setting direction
-              if (startPosition > endPosition) {
-                increment = -128;
-                direction = false;
-              } else {
-                increment = 128;
-                direction = true;
-              }
-
-              // Setting the constant axis
-              if(constAxis == "x") {
-                x = constPosition;
-              } else if(constAxis == "z") {
-                z = constPosition;
-              }
-
-              // temp fix
-              if(direction) {
-                // loop for box color
-                for (let a = 0; a < 4; a++) {
-                  var boxColorName = names[boxColor];
-                  var boxColorTexture = boxColorName.concat("Material");
-                  var flag1 = true,flag2 = true;
-                  // loop for all boxes of color in range
-                  for (let i = startPosition + offset * a; i < endPosition; i += increment) {
-                    // loop for each individual box
-                    for (let j = i; (j < (i + 32)) && (j <= endPosition); j += 8) {
-                      var boxNameJ = j.toString();
-                      if(constAxis == 'x') {
-                        z = j;
-                        var boxNameTempX = x.toString();
-                        var boxNameX = boxNameTempX.replace("-","Negative");
-                        var boxNameZ = boxNameJ.replace("-","Negative");
-                      } else if(constAxis == 'z') {
-                        x = j;
-                        var boxNameTempZ = z.toString();
-                        var boxNameX = boxNameJ.replace("-","Negative");
-                        var boxNameZ = boxNameTempZ.replace("-","Negative");
-                      }
-                      var boxName = boxColorName.concat(boxNameX,"_",boxNameZ);
-                      eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
-                      eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
-                      eval(boxName + '.material = ' + boxColorTexture);
-                      // console.log(boxName);
+            // temp fix
+            if(direction) {
+              // loop for box color
+              for (let a = 0; a < 4; a++) {
+                var boxColorName = names[boxColor];
+                var boxColorTexture = boxColorName.concat("Material");
+                var flag1 = true,flag2 = true;
+                // loop for all boxes of color in range
+                for (let i = startPosition + offset * a; i < endPosition; i += increment) {
+                  // loop for each individual box
+                  for (let j = i; (j < (i + 32)) && (j <= endPosition); j += 8) {
+                    var boxNameJ = j.toString();
+                    if(constAxis == 'x') {
+                      z = j;
+                      var boxNameTempX = x.toString();
+                      var boxNameX = boxNameTempX.replace("-","Negative");
+                      var boxNameZ = boxNameJ.replace("-","Negative");
+                    } else if(constAxis == 'z') {
+                      x = j;
+                      var boxNameTempZ = z.toString();
+                      var boxNameX = boxNameJ.replace("-","Negative");
+                      var boxNameZ = boxNameTempZ.replace("-","Negative");
                     }
-                  }
-                  // setting boxColor increment
-                  if (boxColor == 3) {
-                    boxColor = 0;
-                  } else {
-                    boxColor++;
+                    var boxName = boxColorName.concat(boxNameX,"_",boxNameZ);
+                    eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
+                    eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
+                    eval(boxName + '.material = ' + boxColorTexture);
+                    // console.log(boxName);
                   }
                 }
-              } else {
-                // loop for box color
-                for (let a = 0; a < 4; a++) {
-                  var boxColorName = names[boxColor];
-                  var boxColorTexture = boxColorName.concat("Material");
-                  // loop for all boxes of color in range
-                  for (let i = startPosition - offset * a; i > endPosition; i += increment) {
-                    // loop for each individual box
-                    for (let j = i; (j > (i - 32)) && (j >= endPosition); j -= 8) {
-                      var boxNameJ = j.toString();
-                      if(constAxis == 'x') {
-                        z = j;
-                        var boxNameTempX = x.toString();
-                        var boxNameX = boxNameTempX.replace("-","Negative");
-                        var boxNameZ = boxNameJ.replace("-","Negative");
-                      } else if(constAxis == 'z') {
-                        x = j;
-                        var boxNameTempZ = z.toString();
-                        var boxNameX = boxNameJ.replace("-","Negative");
-                        var boxNameZ = boxNameTempZ.replace("-","Negative");
-                      }
-                      var boxName = boxColorName.concat(boxNameX,"_",boxNameZ);
-                      eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
-                      eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
-                      eval(boxName + '.material = ' + boxColorTexture);
-                      // console.log(boxName);
+                // setting boxColor increment
+                if (boxColor == 3) {
+                  boxColor = 0;
+                } else {
+                  boxColor++;
+                }
+              }
+            } else {
+              // loop for box color
+              for (let a = 0; a < 4; a++) {
+                var boxColorName = names[boxColor];
+                var boxColorTexture = boxColorName.concat("Material");
+                // loop for all boxes of color in range
+                for (let i = startPosition - offset * a; i > endPosition; i += increment) {
+                  // loop for each individual box
+                  for (let j = i; (j > (i - 32)) && (j >= endPosition); j -= 8) {
+                    var boxNameJ = j.toString();
+                    if(constAxis == 'x') {
+                      z = j;
+                      var boxNameTempX = x.toString();
+                      var boxNameX = boxNameTempX.replace("-","Negative");
+                      var boxNameZ = boxNameJ.replace("-","Negative");
+                    } else if(constAxis == 'z') {
+                      x = j;
+                      var boxNameTempZ = z.toString();
+                      var boxNameX = boxNameJ.replace("-","Negative");
+                      var boxNameZ = boxNameTempZ.replace("-","Negative");
                     }
+                    var boxName = boxColorName.concat(boxNameX,"_",boxNameZ);
+                    eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
+                    eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
+                    eval(boxName + '.material = ' + boxColorTexture);
+                    // console.log(boxName);
                   }
-                  // setting boxColor increment
-                  if (boxColor == 3) {
-                    boxColor = 0;
-                  } else {
-                    boxColor++;
-                  }
+                }
+                // setting boxColor increment
+                if (boxColor == 3) {
+                  boxColor = 0;
+                } else {
+                  boxColor++;
                 }
               }
             }
-            function createWalls() {
-              createOutsideWalls();
-              createInsideWalls();
-              createFatBox();
-              createSkinnyBox();
-              createJaggedWall();
+          }
+          function createWalls() {
+            createOutsideWalls();
+            createInsideWalls();
+            createFatBox();
+            createSkinnyBox();
+            createJaggedWall();
 
-              function createOutsideWalls() {
-                // Positive Z Wall
-                createBoxLine("redBox",-508,-52,508,'z');
-                createBoxLine("blueBox",52,60,508,'z');
-                createBoxLine("redBox",68,508,508,'z');
-                // Positive X Wall
-                createBoxLine("yellowBox",500,28,508,'x');
-                createBoxLine("blueBox",-44,-508,508,'x');
-                // Negative Z Wall
-                createBoxLine("greenBox",500,484,-508,'z');
-                createBoxLine("yellowBox",476,-508,-508,'z');
-                // Negative X Wall
-                createBoxLine("redBox",-500,-492,-508,'x');
-                createBoxLine("greenBox",-484,500,-508,'x');
-              }
-              function createInsideWalls() {
-                // Final Turn Straight
-                createBoxLine("yellowBox",-340,-244,348,'z');
-                // Turn 5 left
-                createBoxLine("greenBox",348,132,-244,'x');
-                // Turn 5 - 4 straight
-                createBoxLine("redBox",-236,156,132,'z');
-                // Turn 4 jagged
-                createBoxLine("redBox",140,148,156,'x');
-                createBoxLine("greenBox",156,180,156,'z');
-                createBoxLine("yellowBox",156,180,188,'x');
-                createBoxLine("blueBox",196,220,180,'z');
-                // Turn 4 straight
-                createBoxLine("redBox",180,324,228,'x');
-                // Roundabout top
-                createBoxLine("redBox",228,236,324,'z');
-                createBoxLine("greenBox",244,332,324,'z');
-                // Roundabout side
-                createBoxLine("redBox",316,164,332,'x');
-                // Roundabout bottom
-                createBoxLine("greenBox",332,212,156,'z');
-                // Tilted straight jagged right
-                createBoxLine("greenBox",148,140,212,'x');
-                createBoxLine("greenBox",212,204,132,'z');
-                createBoxLine("yellowBox",196,188,132,'z');
-                createBoxLine("yellowBox",132,124,180,'x');
-                createBoxLine("blueBox",116,108,180,'x');
-                // Tilted Straight straight
-                createBoxLine("blueBox",172,164,108,'z');
-                createBoxLine("redBox",156,-28,108,'z');
-                createBoxLine("yellowBox",108,84,-36,'x');
-                createBoxLine("blueBox",-44,-244,84,'z');
-                // Hairpin Straight
-                createBoxLine("greenBox",76,68,-244,'x');
-                createBoxLine("yellowBox",60,-44,-244,'x');
-                createBoxLine("greenBox",-244,-252,-52,'z');
-                createBoxLine("yellowBox",-260,-268,-52,'z');
-                createBoxLine("yellowBox",-60,-68,-268,'x');
-                createBoxLine("blueBox",-76,-228,-268,'x');
-                // Straight Straight
-                createBoxLine("redBox",-260,324,-228,'z');
-                // Turn 3 - 2
-                createBoxLine("yellowBox",-228,-240,332,'x');
-                createBoxLine("blueBox",-244,-300,332,'x');
-                // Turn 2 straight
-                createBoxLine("greenBox",332,212,-308,'z');
-                createBoxLine("greenBox",204,196,-308,'z');
-                // 1st spill right
-                createBoxLine("greenBox",-300,-252,196,'x');
-                // 1st spill straight
-                createBoxLine("blueBox",188,-180,-252,'z');
-                // 2nd spill left
-                createBoxLine("yellowBox",-252,-260,-188,'x');
-                createBoxLine("blueBox",-268,-324,-188,'x');
-                createBoxLine("greenBox",-332,-340,-188,'x');
-                // Turn 1 flat
-                createBoxLine("greenBox",-196,-204,-340,'z');
-                createBoxLine("yellowBox",-212,-332,-340,'z');
-                // Turn 1 spike
-                createBoxLine("redBox",-348,-404,-268,'x');
-                createBoxLine("yellowBox",-404,-348,-276,'x');
-                // Straightaway
-                createBoxLine("yellowBox",-340,-220,-340,'x');
-                // Straightaway jagged
-                for(let i = 0; i < 560; i += 80) {
-                  createBoxLine("yellowBox",-340,-364,(-212+i),'z');
-                  createBoxLine("blueBox",(-204+i),(-180+i),-364,'x');
-                  createBoxLine("redBox",-340,-364,(-172+i),'z');
-                  createBoxLine("greenBox",(-164+i),(-140+i),-340,'x');
-                  console.log(i);
-                }
-              }
-              function createFatBox() {
-                // Left Wall
-                createBoxLine("yellowBox",500,492,-52,'x');
-                createBoxLine("blueBox",484,284,-52,'x');
-                // Front Wall
-                createBoxLine("greenBox",-44,-36,284,'z');
-                createBoxLine("yellowBox",-28,44,284,'z');
-                // Right Wall
-                createBoxLine("redBox",284,292,52,'x');
-                createBoxLine("greenBox",300,500,52,'x');
-              }
-              function createSkinnyBox() {
-                // 1st Edge Boxes
-                createBoxLine("greenBox",-500,-468,12,'x');
-                createBoxLine("blueBox",-500,-468,4,'x');
-                // 2nd Edge Boxes
-                createBoxLine("yellowBox",-468,-436,12,'x');
-                createBoxLine("redBox",-468,-436,4,'x');
-                // 1st Seperate Boxes
-                createBoxLine("redBox",-420,-404,12,'x');
-                createBoxLine("greenBox",-420,-404,4,'x');
-                // 2nd Seperate Boxes
-                createBoxLine("blueBox",-396,-380,12,'x');
-                createBoxLine("yellowBox",-396,-380,4,'x');
-              }
-              function createJaggedWall() {
-                // Top Wall
-                createBoxLine("greenBox",508,308,20,'z');
-                createBoxLine("blueBox",12,4,308,'x');
-                createBoxLine("redBox",-4,-12,308,'x');
-                createBoxLine("redBox",300,292,-12,'z');
-                createBoxLine("greenBox",284,132,-12,'z');
-                createBoxLine("yellowBox",-20,-44,132,'x');
-                createBoxLine("blueBox",132,-20,-52,'z');
-                createBoxLine("yellowBox",-52,-60,-28,'x');
-                createBoxLine("yellowBox",-36,-44,-60,'z');
-                // Bottom Wall
-                createBoxLine("redBox",-60,140,-68,'z');
-                createBoxLine("yellowBox",-68,-60,148,'x');
-                createBoxLine("blueBox",-52,-44,148,'x');
-                createBoxLine("blueBox",148,156,-36,'z');
-                createBoxLine("redBox",164,508,-36,'z');
+            function createOutsideWalls() {
+              // Positive Z Wall
+              createBoxLine("redBox",-508,-52,508,'z');
+              createBoxLine("blueBox",52,60,508,'z');
+              createBoxLine("redBox",68,508,508,'z');
+              // Positive X Wall
+              createBoxLine("yellowBox",500,28,508,'x');
+              createBoxLine("blueBox",-44,-508,508,'x');
+              // Negative Z Wall
+              createBoxLine("greenBox",500,484,-508,'z');
+              createBoxLine("yellowBox",476,-508,-508,'z');
+              // Negative X Wall
+              createBoxLine("redBox",-500,-492,-508,'x');
+              createBoxLine("greenBox",-484,500,-508,'x');
+            }
+            function createInsideWalls() {
+              // Final Turn Straight
+              createBoxLine("yellowBox",-340,-244,348,'z');
+              // Turn 5 left
+              createBoxLine("greenBox",348,132,-244,'x');
+              // Turn 5 - 4 straight
+              createBoxLine("redBox",-236,156,132,'z');
+              // Turn 4 jagged
+              createBoxLine("redBox",140,148,156,'x');
+              createBoxLine("greenBox",156,180,156,'z');
+              createBoxLine("yellowBox",156,180,188,'x');
+              createBoxLine("blueBox",196,220,180,'z');
+              // Turn 4 straight
+              createBoxLine("redBox",180,324,228,'x');
+              // Roundabout top
+              createBoxLine("redBox",228,236,324,'z');
+              createBoxLine("greenBox",244,332,324,'z');
+              // Roundabout side
+              createBoxLine("redBox",316,164,332,'x');
+              // Roundabout bottom
+              createBoxLine("greenBox",332,212,156,'z');
+              // Tilted straight jagged right
+              createBoxLine("greenBox",148,140,212,'x');
+              createBoxLine("greenBox",212,204,132,'z');
+              createBoxLine("yellowBox",196,188,132,'z');
+              createBoxLine("yellowBox",132,124,180,'x');
+              createBoxLine("blueBox",116,108,180,'x');
+              // Tilted Straight straight
+              createBoxLine("blueBox",172,164,108,'z');
+              createBoxLine("redBox",156,-28,108,'z');
+              createBoxLine("yellowBox",108,84,-36,'x');
+              createBoxLine("blueBox",-44,-244,84,'z');
+              // Hairpin Straight
+              createBoxLine("greenBox",76,68,-244,'x');
+              createBoxLine("yellowBox",60,-44,-244,'x');
+              createBoxLine("greenBox",-244,-252,-52,'z');
+              createBoxLine("yellowBox",-260,-268,-52,'z');
+              createBoxLine("yellowBox",-60,-68,-268,'x');
+              createBoxLine("blueBox",-76,-228,-268,'x');
+              // Straight Straight
+              createBoxLine("redBox",-260,324,-228,'z');
+              // Turn 3 - 2
+              createBoxLine("yellowBox",-228,-240,332,'x');
+              createBoxLine("blueBox",-244,-300,332,'x');
+              // Turn 2 straight
+              createBoxLine("greenBox",332,212,-308,'z');
+              createBoxLine("greenBox",204,196,-308,'z');
+              // 1st spill right
+              createBoxLine("greenBox",-300,-252,196,'x');
+              // 1st spill straight
+              createBoxLine("blueBox",188,-180,-252,'z');
+              // 2nd spill left
+              createBoxLine("yellowBox",-252,-260,-188,'x');
+              createBoxLine("blueBox",-268,-324,-188,'x');
+              createBoxLine("greenBox",-332,-340,-188,'x');
+              // Turn 1 flat
+              createBoxLine("greenBox",-196,-204,-340,'z');
+              createBoxLine("yellowBox",-212,-332,-340,'z');
+              // Turn 1 spike
+              createBoxLine("redBox",-348,-404,-268,'x');
+              createBoxLine("yellowBox",-404,-348,-276,'x');
+              // Straightaway
+              createBoxLine("yellowBox",-340,-220,-340,'x');
+              // Straightaway jagged
+              for(let i = 0; i < 560; i += 80) {
+                createBoxLine("yellowBox",-340,-364,(-212+i),'z');
+                createBoxLine("blueBox",(-204+i),(-180+i),-364,'x');
+                createBoxLine("redBox",-340,-364,(-172+i),'z');
+                createBoxLine("greenBox",(-164+i),(-140+i),-340,'x');
+                console.log(i);
               }
             }
+            function createFatBox() {
+              // Left Wall
+              createBoxLine("yellowBox",500,492,-52,'x');
+              createBoxLine("blueBox",484,284,-52,'x');
+              // Front Wall
+              createBoxLine("greenBox",-44,-36,284,'z');
+              createBoxLine("yellowBox",-28,44,284,'z');
+              // Right Wall
+              createBoxLine("redBox",284,292,52,'x');
+              createBoxLine("greenBox",300,500,52,'x');
+            }
+            function createSkinnyBox() {
+              // 1st Edge Boxes
+              createBoxLine("greenBox",-500,-468,12,'x');
+              createBoxLine("blueBox",-500,-468,4,'x');
+              // 2nd Edge Boxes
+              createBoxLine("yellowBox",-468,-436,12,'x');
+              createBoxLine("redBox",-468,-436,4,'x');
+              // 1st Seperate Boxes
+              createBoxLine("redBox",-420,-404,12,'x');
+              createBoxLine("greenBox",-420,-404,4,'x');
+              // 2nd Seperate Boxes
+              createBoxLine("blueBox",-396,-380,12,'x');
+              createBoxLine("yellowBox",-396,-380,4,'x');
+            }
+            function createJaggedWall() {
+              // Top Wall
+              createBoxLine("greenBox",508,308,20,'z');
+              createBoxLine("blueBox",12,4,308,'x');
+              createBoxLine("redBox",-4,-12,308,'x');
+              createBoxLine("redBox",300,292,-12,'z');
+              createBoxLine("greenBox",284,132,-12,'z');
+              createBoxLine("yellowBox",-20,-44,132,'x');
+              createBoxLine("blueBox",132,-20,-52,'z');
+              createBoxLine("yellowBox",-52,-60,-28,'x');
+              createBoxLine("yellowBox",-36,-44,-60,'z');
+              // Bottom Wall
+              createBoxLine("redBox",-60,140,-68,'z');
+              createBoxLine("yellowBox",-68,-60,148,'x');
+              createBoxLine("blueBox",-52,-44,148,'x');
+              createBoxLine("blueBox",148,156,-36,'z');
+              createBoxLine("redBox",164,508,-36,'z');
+            }
+          }
 
           /******* Trees ******/
           // createTrees();
@@ -388,7 +381,56 @@
           }
 
           /******* Create Finish Line ******/
-          createBoxLine("redBox",-468,-396,84,'z');
+          //createFinishLine();
+          function createFinishLine() {
+            createScaffolding();
+            createFinishBanner();
+            function createScaffolding() {
+              var finishBoxMaterial1 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+              var finishBoxMaterial2 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
+              finishBoxMaterial1.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+              finishBoxMaterial2.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
+              // Create Left Pillar
+              var finishBoxLeft = BABYLON.MeshBuilder.CreateBox("finishBoxLeft", {height: 80, width: 8, depth: 8}, scene);
+              finishBoxLeft.position = new BABYLON.Vector3(-476,40,84);
+              finishBoxLeft.material = finishBoxMaterial1;
+              // Create Right Pillar
+              var finishBoxRight = BABYLON.MeshBuilder.CreateBox("finishBoxRight",{height: 80, width: 8, depth: 8}, scene);
+              finishBoxRight.position = new BABYLON.Vector3(-388,40,84);
+              finishBoxRight.material = finishBoxMaterial2;
+            }
+            function createFinishBanner() {
+              // Create top and bottom of banner
+              var finishBannerMaterial1 = new BABYLON.StandardMaterial("finishBannerMaterial", scene);
+              var finishBannerMaterial2 = new BABYLON.StandardMaterial("finishBannerMaterial", scene);
+              finishBannerMaterial1.diffuseColor = new BABYLON.Color3(1, 1, 0);
+              finishBannerMaterial2.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
+              var finishBannerTop = BABYLON.MeshBuilder.CreateBox("finishBannerTop", {height: 4, width: 80, depth: 4}, scene);
+              finishBannerTop.position = new BABYLON.Vector3(-432,78,84);
+              finishBannerTop.material = finishBannerMaterial1;
+              var finishBannerBottom = BABYLON.MeshBuilder.CreateBox("finishBannerBottom", {height: 4, width: 80, depth: 4}, scene);
+              finishBannerBottom.position = new BABYLON.Vector3(-432,58,84);
+              finishBannerBottom.material = finishBannerMaterial2;
+              // Create planes with banner
+              var bannerMaterial = new BABYLON.StandardMaterial("bannerMaterial", scene);
+              bannerMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/logo.png", scene);
+              bannerMaterial.backFaceCulling = false;
+              var banner1 = BABYLON.MeshBuilder.CreatePlane("banner1", {width: 80, height: 16}, scene);
+              banner1.material = bannerMaterial;
+              banner1.position = new BABYLON.Vector3(-432,68,82);
+              var banner2 = BABYLON.MeshBuilder.CreatePlane("banner1", {width: 80, height: 16}, scene);
+              banner2.material = bannerMaterial;
+              banner2.rotation = new BABYLON.Vector3(0, Math.PI, 0);
+              banner2.position = new BABYLON.Vector3(-432,68,86);
+
+            }
+          }
+
+          /******* Create SkyBox ******/
+          createSkyBox();
+          function createSkyBox() {
+            
+          }
 
           // X Y Z Axis
           function setupOrientationLines() {
