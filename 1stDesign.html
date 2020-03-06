@@ -51,7 +51,7 @@
         	var scene = new BABYLON.Scene(engine);
 
         	//var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
-          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-300,100,50), scene);
+          var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-300,100,-300), scene);
           //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
         	camera.attachControl(canvas, true);
           camera.speed = 25;
@@ -74,7 +74,7 @@
           }
 
           /******* Creating Wall Blocks ******/
-          //createWalls();
+          createWalls();
           function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
 
             // Setting variables
@@ -325,7 +325,7 @@
           }
 
           /******* Trees ******/
-          //createTrees();
+          createTrees();
           function createTrees() {
             //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
@@ -382,7 +382,7 @@
           }
 
           /******* Create Finish Line ******/
-          //createFinishLine();
+          createFinishLine();
           function createFinishLine() {
             createScaffolding();
             createFinishBanner();
@@ -428,7 +428,7 @@
           }
 
           /******* Create SkyBox ******/
-          //createSkyBox();
+          createSkyBox();
           function createSkyBox() {
             console.log("it gets here");
             scene.clearColor = new BABYLON.Color3(0.9, 0.9, 0.3);
@@ -525,6 +525,35 @@
            }
           }
 
+          /******* Create Coin Particles ******/
+          createCoins();
+          function createCoins() {
+            createCoin(-412,5,188);
+            createCoin(-428,5,188);
+            createCoin(-445,5,188);
+
+            function createCoin(x,y,z) {
+                var fountain = BABYLON.MeshBuilder.CreateSphere("fountain", {diameter: 3}, scene);
+                var fountainMaterial = new BABYLON.StandardMaterial("fountainMaterial", scene);
+                fountainMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+                fountainMaterial.alpha = 0.5;
+                fountain.material = fountainMaterial;
+                fountain.position = new BABYLON.Vector3(x,y,z);
+                var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
+                particleSystem.particleTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/particle.png", scene);
+                particleSystem.emitter = fountain; // the starting object, the emitter
+                particleSystem.minSize = 1;
+                particleSystem.maxSize = 3;
+                particleSystem.minEmitBox = new BABYLON.Vector3(-2, -1, -2);
+                particleSystem.maxEmitBox = new BABYLON.Vector3(2, 1, 2);
+                particleSystem.minLifeTime = 0.3;
+                particleSystem.maxLifeTime = 1.5;
+                particleSystem.emitRate = 50;
+                particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+                particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
+                particleSystem.start();
+            }
+          }
 
           // X Y Z Axis
           function setupOrientationLines() {
