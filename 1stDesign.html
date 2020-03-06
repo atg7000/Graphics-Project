@@ -150,7 +150,16 @@
               // Turn 1 spike
               createBoxLine("redBox",-348,-404,-268,'x');
               createBoxLine("yellowBox",-404,-348,-276,'x');
-              // 
+              // Straightaway
+              createBoxLine("yellowBox",-340,-220,-340,'x');
+              // Straightaway jagged
+              for(let i = 0; i < 560; i += 80) {
+                createBoxLine("yellowBox",-340,-364,(-212+i),'z');
+                createBoxLine("blueBox",(-204+i),(-180+i),-364,'x');
+                createBoxLine("redBox",-340,-364,(-172+i),'z');
+                createBoxLine("greenBox",(-164+i),(-140+i),-340,'x');
+                console.log(i);
+              }
             }
 
             /******* Create walls Function ******/
