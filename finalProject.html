@@ -50,19 +50,28 @@
         var createScene = function () {
         	var scene = new BABYLON.Scene(engine);
 
-        	//var camera = new BABYLON.ArcRotateCamera("Camera", 500, -500, 500, BABYLON.Vector3.Zero(), scene);
-          // var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-300,100,-300), scene);
-          //camera.setPosition(new BABYLON.Vector3(400, 1000, -400));
-        	// camera.attachControl(canvas, true);
-          // camera.speed = 25;
-          //camera.setTarget(BABYLON.Vector3.Zero());
-          //camera.setTarget(new BABYLON.Vector3(-480,20,133));
-          createCamera(50,-320);
-          function createCamera(x,z) {
+          /******* Creating Cameras ******/
+          // createCameraForward(-300,-300);
+          // createCameraDown(0,0);
+          // createArcCamera(0,0);
+
+          // Camera Looking Forward
+          function createCameraForward(x,z) {
+            var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,100,z), scene);
+            camera.attachControl(canvas, true);
+            camera.speed = 25;
+          }
+          // Camera Looking Down
+          function createCameraDown(x,z) {
             var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,200,z), scene);
             camera.attachControl(canvas, true);
             camera.speed = 25;
             camera.setTarget(new BABYLON.Vector3(x,-20,z));
+          }
+          // Arc Rotate Camera
+          function createArcCamera(x,z) {
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 500, new BABYLON.Vector3(x,1,z), scene);
+            camera.attachControl(canvas, true);
           }
 
         	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(500, 100, 0), scene);
@@ -626,7 +635,8 @@
           /******* Create Question Boxes ******/
           createQuestions();
           function createQuestions() {
-            var box = BABYLON.MeshBuilder.CreateBox("box", {size: 0.5}, scene);
+            var box = BABYLON.MeshBuilder.CreateBox("box", {size: 6}, scene);
+            box.position = new BABYLON.Vector3(3,3,3);
           }
 
           // X Y Z Axis
