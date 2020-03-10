@@ -52,7 +52,7 @@
 
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
-          // createCameraDown(0,0);
+          createCameraDown(-130,-400);
           // createArcCamera(0,0);
 
           // Camera Looking Forward
@@ -635,8 +635,64 @@
           /******* Create Question Boxes ******/
           createQuestions();
           function createQuestions() {
-            var box = BABYLON.MeshBuilder.CreateBox("box", {size: 6}, scene);
-            box.position = new BABYLON.Vector3(3,3,3);
+            // Set 1
+            createQuestionBox(-139,246);
+            createQuestionBox(-111,232);
+            createQuestionBox(-81,225);
+            // Set 2
+            createQuestionBox(158,295);
+            createQuestionBox(144,318);
+            createQuestionBox(130,342);
+            // Set 3
+            createQuestionBox(262,85);
+            createQuestionBox(283,70);
+            createQuestionBox(305,54);
+            // Set 4
+            createQuestionBox(-8,-103);
+            createQuestionBox(-8,-128);
+            createQuestionBox(-8,-153);
+            // Set 5
+            createQuestionBox(316,-438);
+            createQuestionBox(298,-420);
+            createQuestionBox(281,-401);
+            // Set 6
+            createQuestionBox(-103,-396);
+            createQuestionBox(-125,-398);
+            createQuestionBox(-149,-401);
+          }
+          function createQuestionBox(x,z) {
+            var questionMaterial = new BABYLON.StandardMaterial("questionMaterial", scene);
+            questionMaterial.diffuseTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/questionBox.png", scene);
+            var box = BABYLON.MeshBuilder.CreateBox("box", {size: 4}, scene);
+            box.position = new BABYLON.Vector3(x,(Math.random() * (5.9 - 4.1) + 4.1),z);
+            console.log(Math.random() * Math.PI);
+            box.material = questionMaterial;
+            var direction = true;
+            scene.registerBeforeRender(function () {
+                    // Check if box is moving up
+                    let time = new Date().getTime();
+                    // box.rotation.x = time / 400 % 8;
+                    box.rotation.z = time / 700 % 8;
+                    box.rotation.y = time / 700 % 8;
+                    if (box.position.y < 6 && direction) {
+                        // Increment box position to the right
+                        box.position.y += 0.05;
+                    }
+                    else {
+                        // Swap directions to move left
+                        direction = false;
+                    }
+
+                    // Check if box is moving down
+                    if (box.position.y > 4 && !direction) {
+                        // Decrement box position to the left
+                        box.position.y -= 0.05;
+                    }
+                    else {
+                        // Swap directions to move right
+                        direction = true;
+                    }
+                });
           }
 
           // X Y Z Axis
