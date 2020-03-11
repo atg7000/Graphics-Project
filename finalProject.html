@@ -53,7 +53,8 @@
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
           // createCameraDown(-130,-400);
-          createArcCamera(0,0);
+          // createArcCamera(0,0);
+          createButtonsCamera();
 
           // Camera Looking Forward
           function createCameraForward(x,z) {
@@ -72,6 +73,11 @@
           function createArcCamera(x,z) {
             var camera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 500, new BABYLON.Vector3(x,1,z), scene);
             camera.attachControl(canvas, true);
+          }
+          // Buttons Camera
+          function createButtonsCamera() {
+            var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-703,300,-703), scene);
+            camera.setTarget(new BABYLON.Vector3(-700,300,-700));
           }
 
           /******* Add Lights ******/
@@ -346,7 +352,7 @@
           }
 
           /******* Trees ******/
-          createTrees();
+          // createTrees();
           function createTrees() {
             //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
@@ -403,7 +409,7 @@
           }
 
           /******* Create Finish Line ******/
-          createFinishLine();
+          // createFinishLine();
           function createFinishLine() {
             createScaffolding();
             createFinishBanner();
@@ -449,7 +455,7 @@
           }
 
           /******* Create SkyBox ******/
-          createSkyBox();
+          // createSkyBox();
           function createSkyBox() {
             console.log("it gets here");
             scene.clearColor = new BABYLON.Color3(0.9, 0.9, 0.3);
@@ -465,7 +471,7 @@
           }
 
           /******* Create Cheering People ******/
-          createCrowd();
+          // createCrowd();
           function createCrowd() {
             createPeople();
             createBleachers();
@@ -547,7 +553,7 @@
           }
 
           /******* Create Coin Particles ******/
-          createCoins();
+          // createCoins();
           function createCoins() {
             positiveZCoins();
             middleCoins();
@@ -638,7 +644,7 @@
           }
 
           /******* Create Question Boxes ******/
-          createQuestions();
+          // createQuestions();
           function createQuestions() {
             // Set 1
             createQuestionBox(-139,246);
@@ -707,6 +713,51 @@
                                           loop: true,
                                           autoplay: true
                                         });
+          }
+
+          /******* Adding GUI ******/
+          addGUI();
+          function addGUI() {
+
+            // Adding manager/panel
+            var manager = new BABYLON.GUI.GUI3DManager(scene);
+            var panel = new BABYLON.GUI.SpherePanel();
+            panel.margin = 0.2;
+            manager.addControl(panel);
+            panel.node.rotation.y -= 0.25;
+
+            // Add buttons
+            var button3 = new BABYLON.GUI.HolographicButton("orientation");
+            panel.addControl(button3);
+            var button2 = new BABYLON.GUI.HolographicButton("orientation");
+            panel.addControl(button2);
+            var button1 = new BABYLON.GUI.HolographicButton("orientation");
+            panel.addControl(button1);
+
+            panel.position = new BABYLON.Vector3(-700,300,-700);
+
+            // Race text
+            var buttonText1 = new BABYLON.GUI.TextBlock();
+            buttonText1.text = "Race!!!";
+            buttonText1.color = "black";
+            buttonText1.fontSize = 55;
+
+            // Simulated race text
+            var buttonText2 = new BABYLON.GUI.TextBlock();
+            buttonText2.text = "Simulated\nRace";
+            buttonText2.color = "black";
+            buttonText2.fontSize = 55;
+
+            // Black light text
+            var buttonText3 = new BABYLON.GUI.TextBlock();
+            buttonText3.text = "On/Off\nBlack Lights";
+            buttonText3.color = "black";
+            buttonText3.fontSize = 55;
+
+            // Add text to buttons
+            button1.content = buttonText1;
+            button2.content = buttonText2;
+            button3.content = buttonText3;
           }
 
           // X Y Z Axis
