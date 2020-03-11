@@ -60,30 +60,30 @@
           kartMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
           var kart = BABYLON.MeshBuilder.CreateBox("kart", {size: 10}, scene);
           kart.material = kartMaterial;
-          kart.position = new BABYLON.Vector3(100,100,100);
-          scene.registerBeforeRender(function () {
-            var direction = true;
-                  // Check if box is moving up
-                  let time = new Date().getTime();
-                  if (kart.position.y < 6 && direction) {
-                      // Increment box position to the right
-                      kart.position.y += 0.05;
-                  }
-                  else {
-                      // Swap directions to move left
-                      direction = false;
-                  }
-
-                  // Check if box is moving down
-                  if (kart.position.y > 4 && !direction) {
-                      // Decrement box position to the left
-                      kart.position.y -= 0.05;
-                  }
-                  else {
-                      // Swap directions to move right
-                      direction = true;
-                  }
-              });
+          kart.position = new BABYLON.Vector3(-432,5,84);
+          // scene.registerBeforeRender(function () {
+          //   var direction = true;
+          //         // Check if box is moving up
+          //         let time = new Date().getTime();
+          //         if (kart.position.y < 6 && direction) {
+          //             // Increment box position to the right
+          //             kart.position.y += 0.05;
+          //         }
+          //         else {
+          //             // Swap directions to move left
+          //             direction = false;
+          //         }
+          //
+          //         // Check if box is moving down
+          //         if (kart.position.y > 4 && !direction) {
+          //             // Decrement box position to the left
+          //             kart.position.y -= 0.05;
+          //         }
+          //         else {
+          //             // Swap directions to move right
+          //             direction = true;
+          //         }
+          //     });
 
           /******* Materials ******/
 
@@ -132,7 +132,7 @@
 
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
-          // createCameraDown(-130,-400);
+          // createCameraDown(-438,78);
           // createArcCamera(0,0);
           // createButtonsCamera();
           createKartCamera();
@@ -168,7 +168,8 @@
 
           /******* Add Lights ******/
           // Lights
-          var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+          // var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+          var tempHemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(600, 90,600), scene);
           var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
           // Sun
           var sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
@@ -188,7 +189,7 @@
           }
 
           /******* Creating Wall Blocks ******/
-          createWalls();
+          // createWalls();
           function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
 
             // Setting variables
@@ -429,7 +430,7 @@
           }
 
           /******* Trees ******/
-          createTrees();
+          // createTrees();
           function createTrees() {
             //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
@@ -481,7 +482,7 @@
           }
 
           /******* Create Finish Line ******/
-          createFinishLine();
+          // createFinishLine();
           function createFinishLine() {
             createScaffolding();
             createFinishBanner();
@@ -518,7 +519,7 @@
           }
 
           /******* Create Cheering People ******/
-          createCrowd();
+          // createCrowd();
           function createCrowd() {
             createPeople();
             createBleachers();
@@ -594,7 +595,7 @@
           }
 
           /******* Create Coin Particles ******/
-          createCoins();
+          // createCoins();
           function createCoins() {
             positiveZCoins();
             middleCoins();
@@ -692,13 +693,13 @@
             createQuestionBox(-111,232);
             createQuestionBox(-81,225);
             // Set 2
-            createQuestionBox(158,295);
-            createQuestionBox(144,318);
             createQuestionBox(130,342);
+            createQuestionBox(144,318);
+            createQuestionBox(158,295);
             // Set 3
-            createQuestionBox(262,85);
-            createQuestionBox(283,70);
             createQuestionBox(305,54);
+            createQuestionBox(283,70);
+            createQuestionBox(262,85);
             // Set 4
             createQuestionBox(-8,-103);
             createQuestionBox(-8,-128);
@@ -754,7 +755,7 @@
           }
 
           /******* Adding GUI ******/
-          addGUI();
+          // addGUI();
           function addGUI() {
 
             // Adding manager/panel
