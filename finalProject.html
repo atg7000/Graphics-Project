@@ -61,29 +61,162 @@
           var kart = BABYLON.MeshBuilder.CreateBox("kart", {size: 10}, scene);
           kart.material = kartMaterial;
           kart.position = new BABYLON.Vector3(-432,5,84);
-          // scene.registerBeforeRender(function () {
-          //   var direction = true;
-          //         // Check if box is moving up
-          //         let time = new Date().getTime();
-          //         if (kart.position.y < 6 && direction) {
-          //             // Increment box position to the right
-          //             kart.position.y += 0.05;
-          //         }
-          //         else {
-          //             // Swap directions to move left
-          //             direction = false;
-          //         }
-          //
-          //         // Check if box is moving down
-          //         if (kart.position.y > 4 && !direction) {
-          //             // Decrement box position to the left
-          //             kart.position.y -= 0.05;
-          //         }
-          //         else {
-          //             // Swap directions to move right
-          //             direction = true;
-          //         }
-          //     });
+
+          // animateKart();
+          function animateKart() {
+            // var kartFrames = 200;
+            var kartFrames = 4484;
+            var moveKart = new BABYLON.Animation("moveKart", "position", kartFrames, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+          	var moveKart_keys = [];
+
+              // Frame 1
+              moveKart_keys.push({
+                  frame: 0*60,
+                  value: new BABYLON.Vector3(-432, 5, 84)
+              });
+              // Frame 2
+              moveKart_keys.push({
+                  frame: 104*60,
+                  value: new BABYLON.Vector3(-428, 5, 188)
+              });
+              // Frame 3
+              moveKart_keys.push({
+                  frame: 337*60,
+                  value: new BABYLON.Vector3(-405, 5, 420)
+              });
+              // Frame 4
+              moveKart_keys.push({
+                  frame: 446*60,
+                  value: new BABYLON.Vector3(-301, 5, 451)
+              });
+              // Frame 5
+              moveKart_keys.push({
+                  frame: 604*60,
+                  value: new BABYLON.Vector3(-180, 5, 350)
+              });
+              // Frame 6
+              moveKart_keys.push({
+                  frame: 764*60,
+                  value: new BABYLON.Vector3(-81, 5, 225)
+              });
+              // Frame 7
+              moveKart_keys.push({
+                  frame: 952*60,
+                  value: new BABYLON.Vector3(107, 5, 221)
+              });
+              // Frame 8
+              moveKart_keys.push({
+                  frame: 1056*60,
+                  value: new BABYLON.Vector3(144, 5, 318)
+              });
+              // Frame 9
+              moveKart_keys.push({
+                  frame: 1231*60,
+                  value: new BABYLON.Vector3(270, 5, 440)
+              });
+              // Frame 10
+              moveKart_keys.push({
+                  frame: 1386*60,
+                  value: new BABYLON.Vector3(420, 5, 400)
+              });
+              // Frame 11
+              moveKart_keys.push({
+                  frame: 1656*60,
+                  value: new BABYLON.Vector3(420, 5, 130)
+              });
+              // Frame 12
+              moveKart_keys.push({
+                  frame: 1806*60,
+                  value: new BABYLON.Vector3(283, 5, 70)
+              });
+              // Frame 13
+              moveKart_keys.push({
+                  frame: 2187*60,
+                  value: new BABYLON.Vector3(-85, 5, -28)
+              });
+              // Frame 14
+              moveKart_keys.push({
+                  frame: 2239*60,
+                  value: new BABYLON.Vector3(-108, 5, -75)
+              });
+              // Frame 15
+              moveKart_keys.push({
+                  frame: 2291*60,
+                  value: new BABYLON.Vector3(-85, 5, -122)
+              });
+              // Frame 16
+              moveKart_keys.push({
+                  frame: 2368*60,
+                  value: new BABYLON.Vector3(-8, 5, -128)
+              });
+              // Frame 17
+              moveKart_keys.push({
+                  frame: 2525*60,
+                  value: new BABYLON.Vector3(149, 5, -123)
+              });
+              // Frame 18
+              moveKart_keys.push({
+                  frame: 2650*60,
+                  value: new BABYLON.Vector3(274, 5, -123)
+              });
+              // Frame 19
+              moveKart_keys.push({
+                  frame: 2787*60,
+                  value: new BABYLON.Vector3(410, 5, -140)
+              });
+              // Frame 20
+              moveKart_keys.push({
+                  frame: 3008*60,
+                  value: new BABYLON.Vector3(430, 5, -360)
+              });
+              // Frame 21
+              moveKart_keys.push({
+                  frame: 3163*60,
+                  value: new BABYLON.Vector3(281, 5, -401)
+              });
+              // Frame 22
+              moveKart_keys.push({
+                  frame: 3304*60,
+                  value: new BABYLON.Vector3(140, 5, -401)
+              });
+              // Frame 23
+              moveKart_keys.push({
+                  frame: 3396*60,
+                  value: new BABYLON.Vector3(91, 5, -323)
+              });
+              // Frame 24
+              moveKart_keys.push({
+                  frame: 3529*60,
+                  value: new BABYLON.Vector3(-42, 5, -315)
+              });
+              // Frame 25
+              moveKart_keys.push({
+                  frame: 3646*60,
+                  value: new BABYLON.Vector3(-125, 5, -398)
+              });
+              // Frame 26
+              moveKart_keys.push({
+                  frame: 3858*60,
+                  value: new BABYLON.Vector3(-325, 5, -470)
+              });
+              // Frame 27
+              moveKart_keys.push({
+                  frame: 4084*60,
+                  value: new BABYLON.Vector3(-432, 5, -270)
+              });
+              // Frame 28
+              moveKart_keys.push({
+                  frame: 4484*60,
+                  value: new BABYLON.Vector3(-432, 5, 100)
+              });
+
+              moveKart.setKeys(moveKart_keys);
+              scene.beginDirectAnimation(kart, [moveKart], 0, kartFrames * 60, false, 1,);
+              moveKart.onAnimationEnd = function () {
+                console.log("It Gets here");
+                  scene.activeCamera = buttonCamera;
+              }
+            }
 
           /******* Materials ******/
 
@@ -131,45 +264,47 @@
           questionMaterial.diffuseTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/questionBox.png", scene);
 
           /******* Creating Cameras ******/
-          // createCameraForward(-300,-300);
-          // createCameraDown(-438,78);
-          // createArcCamera(0,0);
-          // createButtonsCamera();
+          var forwardCamera, downCamera, arcCamera, buttonCamera, kartCamera;
+          createCameraForward(-300,-300);
+          createCameraDown(-438,78);
+          createArcCamera(0,0);
+          createButtonsCamera();
           createKartCamera();
 
           // Camera Looking Forward
           function createCameraForward(x,z) {
-            var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,100,z), scene);
-            camera.attachControl(canvas, true);
-            camera.speed = 25;
+            forwardCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,100,z), scene);
+            forwardCamera.attachControl(canvas, true);
+            forwardCamera.speed = 25;
           }
           // Camera Looking Down
           function createCameraDown(x,z) {
-            var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,200,z), scene);
-            camera.attachControl(canvas, true);
-            camera.speed = 25;
-            camera.setTarget(new BABYLON.Vector3(x,-20,z));
+            downCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,200,z), scene);
+            downCamera.attachControl(canvas, true);
+            downCamera.speed = 25;
+            downCamera.setTarget(new BABYLON.Vector3(x,-20,z));
           }
           // Arc Rotate Camera
           function createArcCamera(x,z) {
-            var camera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 500, new BABYLON.Vector3(x,1,z), scene);
-            camera.attachControl(canvas, true);
+            arcCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 500, new BABYLON.Vector3(x,1,z), scene);
+            arcCamera.attachControl(canvas, true);
           }
           // Buttons Camera
           function createButtonsCamera() {
-            var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-703,300,-703), scene);
-            camera.setTarget(new BABYLON.Vector3(-700,300,-700));
+            buttonCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-703,300,-703), scene);
+            buttonCamera.setTarget(new BABYLON.Vector3(-700,300,-700));
           }
           // Kart Camera
           function createKartCamera() {
-            var camera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 30, kart, scene);
-            camera.attachControl(canvas, true);
+            kartCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 30, kart, scene);
+            kartCamera.attachControl(canvas, true);
           }
+          scene.activeCamera = buttonCamera;
 
           /******* Add Lights ******/
           // Lights
-          // var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
-          var tempHemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(600, 90,600), scene);
+          var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+          // var tempHemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(600, 90,600), scene);
           var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
           // Sun
           var sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
@@ -755,7 +890,7 @@
           }
 
           /******* Adding GUI ******/
-          // addGUI();
+          addGUI();
           function addGUI() {
 
             // Adding manager/panel
@@ -803,6 +938,9 @@
             });
             button2.onPointerClickObservable.add(() => {
               console.log("Pressed Button 2");
+              scene.activeCamera = kartCamera;
+              animateKart();
+              // scene.activeCamera = buttonCamera;
             });
             button3.onPointerClickObservable.add(() => {
               console.log("Pressed Button 3");
