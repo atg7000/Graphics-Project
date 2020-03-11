@@ -48,23 +48,53 @@
 
         /******* Add the create scene function ******/
         var createScene = function () {
+          // Create Scene
         	var scene = new BABYLON.Scene(engine);
+          scene.clearColor = new BABYLON.Color3(0, 0, 0);
+
+          /******* Flags ******/
+          var emissiveFlag = true;
 
           /******* Materials ******/
 
+          // Colors
+          var colors = [
+        		new BABYLON.Color3(1, 0.1, 0),
+        		new BABYLON.Color3(0.2, 0.9, 0),
+        		new BABYLON.Color3(1, 1, 0),
+        		new BABYLON.Color3(0.1, 0.2, 1),
+            new BABYLON.Color4(0, 0, 0, 0),
+            new BABYLON.Color3(1, 1, 1)
+        	]
+
           // Box Materials
           var redMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
-          redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+          redMaterial.diffuseColor = colors[0];
           var greenMaterial = new BABYLON.StandardMaterial("greenMaterial", scene);
-          greenMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
+          greenMaterial.diffuseColor = colors[1];
           var yellowMaterial = new BABYLON.StandardMaterial("yellowMaterial", scene);
-          yellowMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+          yellowMaterial.diffuseColor = colors[2];
           var blueMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
-          blueMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
+          blueMaterial.diffuseColor = colors[3];
 
           // Ground Material
           var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
           groundMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
+
+          // SkyBox material
+          var skyBoxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+          skyBoxMaterial.backFaceCulling = false;
+          skyBoxMaterial.reflectionTexture = new BABYLON.CubeTexture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/skyBox/sky", scene);
+          skyBoxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+          skyBoxMaterial.disableLighting = true;
+          var skyBox = BABYLON.Mesh.CreateBox("skyBox", 2000, scene);
+          skyBox.material = skyBoxMaterial;
+          // skyBox.infiniteDistance = true;
+          skyBox.renderingGroupId = 0;
+
+          // Banner Material
+          var bannerMaterial = new BABYLON.StandardMaterial("bannerMaterial", scene);
+          bannerMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/logo.png", scene);
 
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
@@ -97,19 +127,15 @@
           }
 
           /******* Add Lights ******/
-          addLights();
-          function addLights() {
-             // Lights
-        	   var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
-             var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
-
-             // Sun
-             var sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
-             sunMaterial.emissiveColor = new BABYLON.Color3(1, 1, 0);
-             var sun = BABYLON.MeshBuilder.CreateSphere("sun", {diameter: 100}, scene);
-             sun.position = new BABYLON.Vector3(600,90,600);
-             sun.material = sunMaterial;
-          }
+          // Lights
+          var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+          var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
+          // Sun
+          var sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
+          sunMaterial.emissiveColor = new BABYLON.Color3(1, 1, 0);
+          var sun = BABYLON.MeshBuilder.CreateSphere("sun", {diameter: 100}, scene);
+          sun.position = new BABYLON.Vector3(600,90,600);
+          sun.material = sunMaterial;
 
           /******* Creating Ground ******/
           createGround();
@@ -364,7 +390,7 @@
           }
 
           /******* Trees ******/
-          // createTrees();
+          createTrees();
           function createTrees() {
             //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
@@ -421,7 +447,7 @@
           }
 
           /******* Create Finish Line ******/
-          // createFinishLine();
+          createFinishLine();
           function createFinishLine() {
             createScaffolding();
             createFinishBanner();
@@ -445,8 +471,6 @@
             }
             function createFinishBanner() {
               // Create planes with banner
-              var bannerMaterial = new BABYLON.StandardMaterial("bannerMaterial", scene);
-              bannerMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/logo.png", scene);
               bannerMaterial.backFaceCulling = false;
               var banner1 = BABYLON.MeshBuilder.CreatePlane("banner1", {width: 80, height: 16}, scene);
               banner1.material = bannerMaterial;
@@ -457,22 +481,6 @@
               banner2.position = new BABYLON.Vector3(-432,68,86);
 
             }
-          }
-
-          /******* Create SkyBox ******/
-          // createSkyBox();
-          function createSkyBox() {
-            console.log("it gets here");
-            scene.clearColor = new BABYLON.Color3(0.9, 0.9, 0.3);
-            var skyBox = BABYLON.Mesh.CreateBox("skyBox", 2000, scene);
-            var skyBoxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-            skyBoxMaterial.backFaceCulling = false;
-            skyBoxMaterial.reflectionTexture = new BABYLON.CubeTexture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/skyBox/sky", scene);
-            skyBoxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-            skyBoxMaterial.disableLighting = true;
-            skyBox.material = skyBoxMaterial;
-            // skyBox.infiniteDistance = true;
-            skyBox.renderingGroupId = 0;
           }
 
           /******* Create Cheering People ******/
@@ -552,7 +560,7 @@
           }
 
           /******* Create Coin Particles ******/
-          // createCoins();
+          createCoins();
           function createCoins() {
             positiveZCoins();
             middleCoins();
@@ -643,7 +651,7 @@
           }
 
           /******* Create Question Boxes ******/
-          // createQuestions();
+          createQuestions();
           function createQuestions() {
             // Set 1
             createQuestionBox(-139,246);
@@ -756,6 +764,57 @@
             button1.content = buttonText1;
             button2.content = buttonText2;
             button3.content = buttonText3;
+
+            // Adding control to buttons
+            button1.onPointerClickObservable.add(() => {
+              console.log("Pressed Button 1");
+            });
+            button2.onPointerClickObservable.add(() => {
+              console.log("Pressed Button 2");
+            });
+            button3.onPointerClickObservable.add(() => {
+              console.log("Pressed Button 3");
+              changeLights();
+            });
+          }
+          function changeLights() {
+            if(emissiveFlag) {
+              // Turn on glow
+              redMaterial.emissiveColor = colors[0];
+              greenMaterial.emissiveColor = colors[1];
+              yellowMaterial.emissiveColor = colors[2];
+              blueMaterial.emissiveColor = colors[3];
+              bannerMaterial.emissiveColor = colors[5];
+
+              // Turn down Lights
+              pointLight.setEnabled(false);
+              hemiLight.intensity = 0.3;
+
+              // Make things invisible
+              sun.isVisible = false;
+              skyBox.isVisible = false;
+
+              // reset flag
+              emissiveFlag = false;
+            } else {
+              // Turn off Glow
+              redMaterial.emissiveColor = colors[4];
+              greenMaterial.emissiveColor = colors[4];
+              yellowMaterial.emissiveColor = colors[4];
+              blueMaterial.emissiveColor = colors[4];
+              bannerMaterial.emissiveColor = colors[4];
+
+              // Turn up Lights
+              pointLight.setEnabled(true);
+              hemiLight.intensity = 1;
+
+              // Make things visible
+              sun.isVisible = true;
+              skyBox.isVisible = true;
+
+              // reset flag
+              emissiveFlag = true;
+            }
           }
 
           // X Y Z Axis
