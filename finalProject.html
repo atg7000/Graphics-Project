@@ -83,8 +83,16 @@
           /******* Add Lights ******/
           addLights();
           function addLights() {
+             // Lights
         	   var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
              var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
+
+             // Sun
+             var sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
+             sunMaterial.emissiveColor = new BABYLON.Color3(1, 1, 0);
+             var sun = BABYLON.MeshBuilder.CreateSphere("sun", {diameter: 100}, scene);
+             sun.position = new BABYLON.Vector3(600,90,600);
+             sun.material = sunMaterial;
           }
 
           /******* Creating Ground ******/
