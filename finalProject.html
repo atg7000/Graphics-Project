@@ -52,8 +52,8 @@
 
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
-          createCameraDown(-130,-400);
-          // createArcCamera(0,0);
+          // createCameraDown(-130,-400);
+          createArcCamera(0,0);
 
           // Camera Looking Forward
           function createCameraForward(x,z) {
@@ -74,7 +74,12 @@
             camera.attachControl(canvas, true);
           }
 
-        	var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(500, 100, 0), scene);
+          /******* Add Lights ******/
+          addLights();
+          function addLights() {
+        	   var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+             var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 90, 600), scene);
+          }
 
           /******* Creating Ground ******/
           createGround();
@@ -693,6 +698,15 @@
                         direction = true;
                     }
                 });
+          }
+
+          /******* Create Music ******/
+          // addMusic();
+          function addMusic() {
+            var music = new BABYLON.Sound("Music", "file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/music.mp3", scene, null, {
+                                          loop: true,
+                                          autoplay: true
+                                        });
           }
 
           // X Y Z Axis
