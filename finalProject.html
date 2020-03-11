@@ -62,162 +62,6 @@
           kart.material = kartMaterial;
           kart.position = new BABYLON.Vector3(-432,5,84);
 
-          // animateKart();
-          function animateKart() {
-            // var kartFrames = 200;
-            var kartFrames = 4484;
-            var moveKart = new BABYLON.Animation("moveKart", "position", kartFrames, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-          	var moveKart_keys = [];
-
-              // Frame 1
-              moveKart_keys.push({
-                  frame: 0*60,
-                  value: new BABYLON.Vector3(-432, 5, 84)
-              });
-              // Frame 2
-              moveKart_keys.push({
-                  frame: 104*60,
-                  value: new BABYLON.Vector3(-428, 5, 188)
-              });
-              // Frame 3
-              moveKart_keys.push({
-                  frame: 337*60,
-                  value: new BABYLON.Vector3(-405, 5, 420)
-              });
-              // Frame 4
-              moveKart_keys.push({
-                  frame: 446*60,
-                  value: new BABYLON.Vector3(-301, 5, 451)
-              });
-              // Frame 5
-              moveKart_keys.push({
-                  frame: 604*60,
-                  value: new BABYLON.Vector3(-180, 5, 350)
-              });
-              // Frame 6
-              moveKart_keys.push({
-                  frame: 764*60,
-                  value: new BABYLON.Vector3(-81, 5, 225)
-              });
-              // Frame 7
-              moveKart_keys.push({
-                  frame: 952*60,
-                  value: new BABYLON.Vector3(107, 5, 221)
-              });
-              // Frame 8
-              moveKart_keys.push({
-                  frame: 1056*60,
-                  value: new BABYLON.Vector3(144, 5, 318)
-              });
-              // Frame 9
-              moveKart_keys.push({
-                  frame: 1231*60,
-                  value: new BABYLON.Vector3(270, 5, 440)
-              });
-              // Frame 10
-              moveKart_keys.push({
-                  frame: 1386*60,
-                  value: new BABYLON.Vector3(420, 5, 400)
-              });
-              // Frame 11
-              moveKart_keys.push({
-                  frame: 1656*60,
-                  value: new BABYLON.Vector3(420, 5, 130)
-              });
-              // Frame 12
-              moveKart_keys.push({
-                  frame: 1806*60,
-                  value: new BABYLON.Vector3(283, 5, 70)
-              });
-              // Frame 13
-              moveKart_keys.push({
-                  frame: 2187*60,
-                  value: new BABYLON.Vector3(-85, 5, -28)
-              });
-              // Frame 14
-              moveKart_keys.push({
-                  frame: 2239*60,
-                  value: new BABYLON.Vector3(-108, 5, -75)
-              });
-              // Frame 15
-              moveKart_keys.push({
-                  frame: 2291*60,
-                  value: new BABYLON.Vector3(-85, 5, -122)
-              });
-              // Frame 16
-              moveKart_keys.push({
-                  frame: 2368*60,
-                  value: new BABYLON.Vector3(-8, 5, -128)
-              });
-              // Frame 17
-              moveKart_keys.push({
-                  frame: 2525*60,
-                  value: new BABYLON.Vector3(149, 5, -123)
-              });
-              // Frame 18
-              moveKart_keys.push({
-                  frame: 2650*60,
-                  value: new BABYLON.Vector3(274, 5, -123)
-              });
-              // Frame 19
-              moveKart_keys.push({
-                  frame: 2787*60,
-                  value: new BABYLON.Vector3(410, 5, -140)
-              });
-              // Frame 20
-              moveKart_keys.push({
-                  frame: 3008*60,
-                  value: new BABYLON.Vector3(430, 5, -360)
-              });
-              // Frame 21
-              moveKart_keys.push({
-                  frame: 3163*60,
-                  value: new BABYLON.Vector3(281, 5, -401)
-              });
-              // Frame 22
-              moveKart_keys.push({
-                  frame: 3304*60,
-                  value: new BABYLON.Vector3(140, 5, -401)
-              });
-              // Frame 23
-              moveKart_keys.push({
-                  frame: 3396*60,
-                  value: new BABYLON.Vector3(91, 5, -323)
-              });
-              // Frame 24
-              moveKart_keys.push({
-                  frame: 3529*60,
-                  value: new BABYLON.Vector3(-42, 5, -315)
-              });
-              // Frame 25
-              moveKart_keys.push({
-                  frame: 3646*60,
-                  value: new BABYLON.Vector3(-125, 5, -398)
-              });
-              // Frame 26
-              moveKart_keys.push({
-                  frame: 3858*60,
-                  value: new BABYLON.Vector3(-325, 5, -470)
-              });
-              // Frame 27
-              moveKart_keys.push({
-                  frame: 4084*60,
-                  value: new BABYLON.Vector3(-432, 5, -270)
-              });
-              // Frame 28
-              moveKart_keys.push({
-                  frame: 4484*60,
-                  value: new BABYLON.Vector3(-432, 5, 100)
-              });
-
-              moveKart.setKeys(moveKart_keys);
-              scene.beginDirectAnimation(kart, [moveKart], 0, kartFrames * 60, false, 1,);
-              moveKart.onAnimationEnd = function () {
-                console.log("It Gets here");
-                  scene.activeCamera = buttonCamera;
-              }
-            }
-
           /******* Materials ******/
 
           // Colors
@@ -296,7 +140,7 @@
           }
           // Kart Camera
           function createKartCamera() {
-            kartCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 30, kart, scene);
+            kartCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 50, kart, scene);
             kartCamera.attachControl(canvas, true);
           }
           scene.activeCamera = buttonCamera;
@@ -888,6 +732,165 @@
                                           autoplay: true
                                         });
           }
+
+          /******* Kart Animation ******/
+          function animateKart() {
+            var kartFrames = 200;
+            var moveKart = new BABYLON.Animation("moveKart", "position", kartFrames, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+          	var moveKart_keys = [];
+
+              // Frame 1
+              moveKart_keys.push({
+                  frame: 0,
+                  value: new BABYLON.Vector3(-432, 5, 84)
+              });
+              // Frame 2
+              moveKart_keys.push({
+                  frame: 104,
+                  value: new BABYLON.Vector3(-428, 5, 188)
+              });
+              // Frame 3
+              moveKart_keys.push({
+                  frame: 337,
+                  value: new BABYLON.Vector3(-405, 5, 420)
+              });
+              // Frame 4
+              moveKart_keys.push({
+                  frame: 446,
+                  value: new BABYLON.Vector3(-301, 5, 451)
+              });
+              // Frame 5
+              moveKart_keys.push({
+                  frame: 604,
+                  value: new BABYLON.Vector3(-180, 5, 350)
+              });
+              // Frame 6
+              moveKart_keys.push({
+                  frame: 764,
+                  value: new BABYLON.Vector3(-81, 5, 225)
+              });
+              // Frame 7
+              moveKart_keys.push({
+                  frame: 952,
+                  value: new BABYLON.Vector3(107, 5, 221)
+              });
+              // Frame 8
+              moveKart_keys.push({
+                  frame: 1056,
+                  value: new BABYLON.Vector3(144, 5, 318)
+              });
+              // Frame 9
+              moveKart_keys.push({
+                  frame: 1231,
+                  value: new BABYLON.Vector3(270, 5, 440)
+              });
+              // Frame 10
+              moveKart_keys.push({
+                  frame: 1386,
+                  value: new BABYLON.Vector3(420, 5, 400)
+              });
+              // Frame 11
+              moveKart_keys.push({
+                  frame: 1656,
+                  value: new BABYLON.Vector3(420, 5, 130)
+              });
+              // Frame 12
+              moveKart_keys.push({
+                  frame: 1806,
+                  value: new BABYLON.Vector3(283, 5, 70)
+              });
+              // Frame 13
+              moveKart_keys.push({
+                  frame: 2187,
+                  value: new BABYLON.Vector3(-85, 5, -28)
+              });
+              // Frame 14
+              moveKart_keys.push({
+                  frame: 2239,
+                  value: new BABYLON.Vector3(-108, 5, -75)
+              });
+              // Frame 15
+              moveKart_keys.push({
+                  frame: 2291,
+                  value: new BABYLON.Vector3(-85, 5, -122)
+              });
+              // Frame 16
+              moveKart_keys.push({
+                  frame: 2368,
+                  value: new BABYLON.Vector3(-8, 5, -128)
+              });
+              // Frame 17
+              moveKart_keys.push({
+                  frame: 2525,
+                  value: new BABYLON.Vector3(149, 5, -123)
+              });
+              // Frame 18
+              moveKart_keys.push({
+                  frame: 2650,
+                  value: new BABYLON.Vector3(274, 5, -123)
+              });
+              // Frame 19
+              moveKart_keys.push({
+                  frame: 2787,
+                  value: new BABYLON.Vector3(410, 5, -140)
+              });
+              // Frame 20
+              moveKart_keys.push({
+                  frame: 3008,
+                  value: new BABYLON.Vector3(430, 5, -360)
+              });
+              // Frame 21
+              moveKart_keys.push({
+                  frame: 3163,
+                  value: new BABYLON.Vector3(281, 5, -401)
+              });
+              // Frame 22
+              moveKart_keys.push({
+                  frame: 3304,
+                  value: new BABYLON.Vector3(140, 5, -401)
+              });
+              // Frame 23
+              moveKart_keys.push({
+                  frame: 3396,
+                  value: new BABYLON.Vector3(91, 5, -323)
+              });
+              // Frame 24
+              moveKart_keys.push({
+                  frame: 3529,
+                  value: new BABYLON.Vector3(-42, 5, -315)
+              });
+              // Frame 25
+              moveKart_keys.push({
+                  frame: 3646,
+                  value: new BABYLON.Vector3(-125, 5, -398)
+              });
+              // Frame 26
+              moveKart_keys.push({
+                  frame: 3858,
+                  value: new BABYLON.Vector3(-325, 5, -470)
+              });
+              // Frame 27
+              moveKart_keys.push({
+                  frame: 4084,
+                  value: new BABYLON.Vector3(-432, 5, -270)
+              });
+              // Frame 28
+              moveKart_keys.push({
+                  frame: 4484,
+                  value: new BABYLON.Vector3(-432, 5, 100)
+              });
+              // Frame 29 (Stop Frame)
+              moveKart_keys.push({
+                  frame: 5000,
+                  value: new BABYLON.Vector3(-432, 5, 100)
+              });
+
+              moveKart.setKeys(moveKart_keys);
+              scene.beginDirectAnimation(kart, [moveKart], 0, kartFrames * 5000, false, 1, function () {
+                  console.log("It Gets here");
+                  scene.activeCamera = buttonCamera;
+              });
+            }
 
           /******* Adding GUI ******/
           addGUI();
