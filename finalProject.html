@@ -50,6 +50,22 @@
         var createScene = function () {
         	var scene = new BABYLON.Scene(engine);
 
+          /******* Materials ******/
+
+          // Box Materials
+          var redMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
+          redMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
+          var greenMaterial = new BABYLON.StandardMaterial("greenMaterial", scene);
+          greenMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
+          var yellowMaterial = new BABYLON.StandardMaterial("yellowMaterial", scene);
+          yellowMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+          var blueMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
+          blueMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
+
+          // Ground Material
+          var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+          groundMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
+
           /******* Creating Cameras ******/
           // createCameraForward(-300,-300);
           // createCameraDown(-130,-400);
@@ -99,12 +115,9 @@
           createGround();
           function createGround() {
             var myGround = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1024, height: 1024}, scene);
-            var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-            groundMaterial.backFaceCulling = false;
             //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.hpgreenvivarium.com/wp-content/uploads/2020/02/marioKartTrack.png", scene);
             //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
             //groundMaterial.ambientTexture = new BABYLON.Texture("file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
-            groundMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
             myGround.material = groundMaterial;
           }
 
@@ -118,17 +131,8 @@
             var increment = 128;
             var direction = true;
             var names = ["redBox","greenBox","yellowBox","blueBox"];
+            var colorNames = ["redMaterial", "greenMaterial","yellowMaterial","blueMaterial"];
             var boxColor = names.indexOf(startBox);
-
-            // Setting Materials
-            var redBoxMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
-            redBoxMaterial.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-            var greenBoxMaterial = new BABYLON.StandardMaterial("greenMaterial", scene);
-            greenBoxMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
-            var yellowBoxMaterial = new BABYLON.StandardMaterial("yellowMaterial", scene);
-            yellowBoxMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
-            var blueBoxMaterial = new BABYLON.StandardMaterial("blueMaterial", scene);
-            blueBoxMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
 
             // Setting direction
             if (startPosition > endPosition) {
@@ -151,7 +155,7 @@
               // loop for box color
               for (let a = 0; a < 4; a++) {
                 var boxColorName = names[boxColor];
-                var boxColorTexture = boxColorName.concat("Material");
+                var boxColorTexture = colorNames[boxColor];
                 var flag1 = true,flag2 = true;
                 // loop for all boxes of color in range
                 for (let i = startPosition + offset * a; i < endPosition; i += increment) {
@@ -187,7 +191,7 @@
               // loop for box color
               for (let a = 0; a < 4; a++) {
                 var boxColorName = names[boxColor];
-                var boxColorTexture = boxColorName.concat("Material");
+                var boxColorTexture = colorNames[boxColor];
                 // loop for all boxes of color in range
                 for (let i = startPosition - offset * a; i > endPosition; i += increment) {
                   // loop for each individual box
@@ -422,31 +426,24 @@
             createScaffolding();
             createFinishBanner();
             function createScaffolding() {
-              var finishBoxMaterial1 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-              var finishBoxMaterial2 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-              finishBoxMaterial1.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-              finishBoxMaterial2.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
               // Create Left Pillar
               var finishBoxLeft = BABYLON.MeshBuilder.CreateBox("finishBoxLeft", {height: 80, width: 8, depth: 8}, scene);
               finishBoxLeft.position = new BABYLON.Vector3(-476,40,84);
-              finishBoxLeft.material = finishBoxMaterial1;
+              finishBoxLeft.material = redMaterial;
               // Create Right Pillar
               var finishBoxRight = BABYLON.MeshBuilder.CreateBox("finishBoxRight",{height: 80, width: 8, depth: 8}, scene);
               finishBoxRight.position = new BABYLON.Vector3(-388,40,84);
-              finishBoxRight.material = finishBoxMaterial2;
-            }
-            function createFinishBanner() {
-              // Create top and bottom of banner
-              var finishBannerMaterial1 = new BABYLON.StandardMaterial("finishBannerMaterial", scene);
-              var finishBannerMaterial2 = new BABYLON.StandardMaterial("finishBannerMaterial", scene);
-              finishBannerMaterial1.diffuseColor = new BABYLON.Color3(1, 1, 0);
-              finishBannerMaterial2.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
+              finishBoxRight.material = greenMaterial;
+              // Create Top Pillar
               var finishBannerTop = BABYLON.MeshBuilder.CreateBox("finishBannerTop", {height: 4, width: 80, depth: 4}, scene);
               finishBannerTop.position = new BABYLON.Vector3(-432,78,84);
-              finishBannerTop.material = finishBannerMaterial1;
+              finishBannerTop.material = yellowMaterial;
+              // Create Bottom Pillar
               var finishBannerBottom = BABYLON.MeshBuilder.CreateBox("finishBannerBottom", {height: 4, width: 80, depth: 4}, scene);
               finishBannerBottom.position = new BABYLON.Vector3(-432,58,84);
-              finishBannerBottom.material = finishBannerMaterial2;
+              finishBannerBottom.material = blueMaterial;
+            }
+            function createFinishBanner() {
               // Create planes with banner
               var bannerMaterial = new BABYLON.StandardMaterial("bannerMaterial", scene);
               bannerMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/logo.png", scene);
@@ -479,7 +476,7 @@
           }
 
           /******* Create Cheering People ******/
-          // createCrowd();
+          createCrowd();
           function createCrowd() {
             createPeople();
             createBleachers();
@@ -524,39 +521,33 @@
              });
            }
            function createBleachers() {
-             var bleacherMaterial1 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-             var bleacherMaterial2 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-             var bleacherMaterial3 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-             var bleacherMaterial4 = new BABYLON.StandardMaterial("finishBoxMaterial", scene);
-             bleacherMaterial1.diffuseColor = new BABYLON.Color3(1, 0.1, 0);
-             bleacherMaterial2.diffuseColor = new BABYLON.Color3(0.2, 0.9, 0);
-             bleacherMaterial3.diffuseColor = new BABYLON.Color3(1, 1, 0);
-             bleacherMaterial4.diffuseColor = new BABYLON.Color3(0.1, 0.2, 1);
-
+             // Left bleachers
              var bleacherBoxTallLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallLeft", {height: 24, width: 3, depth: 3}, scene);
              bleacherBoxTallLeft.position = new BABYLON.Vector3(-486,12,128.5);
-             bleacherBoxTallLeft.material = bleacherMaterial1;
+             bleacherBoxTallLeft.material = redMaterial;
              var bleacherBoxMediumLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxMediumLeft", {height: 16, width: 3, depth: 3}, scene);
              bleacherBoxMediumLeft.position = new BABYLON.Vector3(-483,8,128.5);
-             bleacherBoxMediumLeft.material = bleacherMaterial2;
+             bleacherBoxMediumLeft.material = greenMaterial;
              var bleacherBoxShortLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortLeft", {height: 8, width: 3, depth: 3}, scene);
              bleacherBoxShortLeft.position = new BABYLON.Vector3(-480,4,128.5);
-             bleacherBoxShortLeft.material = bleacherMaterial3;
+             bleacherBoxShortLeft.material = yellowMaterial;
 
+             // Right Bleachers
              var bleacherBoxTallRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 24, width: 3, depth: 3}, scene);
              bleacherBoxTallRight.position = new BABYLON.Vector3(-486,12,179.5);
-             bleacherBoxTallRight.material = bleacherMaterial1;
+             bleacherBoxTallRight.material = redMaterial;
              var bleacherBoxMediumRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxMediumRight", {height: 16, width: 3, depth: 3}, scene);
              bleacherBoxMediumRight.position = new BABYLON.Vector3(-483,8,179.5);
-             bleacherBoxMediumRight.material = bleacherMaterial2;
+             bleacherBoxMediumRight.material = greenMaterial;
              var bleacherBoxShortRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortRight", {height: 8, width: 3, depth: 3}, scene);
              bleacherBoxShortRight.position = new BABYLON.Vector3(-480,4,179.5);
-             bleacherBoxShortRight.material = bleacherMaterial3;
+             bleacherBoxShortRight.material = yellowMaterial;
 
+             // Top of Bleacher
              var bleacherBoxTop = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 3, width: 54, depth: 3}, scene);
              bleacherBoxTop.position = new BABYLON.Vector3(-486,25.5,154);
              bleacherBoxTop.rotation = new BABYLON.Vector3(0, Math.PI/2, 0);
-             bleacherBoxTop.material = bleacherMaterial4;
+             bleacherBoxTop.material = blueMaterial;
            }
           }
 
@@ -733,6 +724,7 @@
             panel.margin = 0.2;
             manager.addControl(panel);
             panel.node.rotation.y -= 0.25;
+            panel.position = new BABYLON.Vector3(-700,300,-700);
 
             // Add buttons
             var button3 = new BABYLON.GUI.HolographicButton("orientation");
@@ -741,8 +733,6 @@
             panel.addControl(button2);
             var button1 = new BABYLON.GUI.HolographicButton("orientation");
             panel.addControl(button1);
-
-            panel.position = new BABYLON.Vector3(-700,300,-700);
 
             // Race text
             var buttonText1 = new BABYLON.GUI.TextBlock();
