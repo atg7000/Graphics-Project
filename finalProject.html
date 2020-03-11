@@ -55,6 +55,36 @@
           /******* Flags ******/
           var emissiveFlag = true;
 
+          /******* Import Kart ******/
+          var kartMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+          kartMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+          var kart = BABYLON.MeshBuilder.CreateBox("kart", {size: 10}, scene);
+          kart.material = kartMaterial;
+          kart.position = new BABYLON.Vector3(100,100,100);
+          scene.registerBeforeRender(function () {
+            var direction = true;
+                  // Check if box is moving up
+                  let time = new Date().getTime();
+                  if (kart.position.y < 6 && direction) {
+                      // Increment box position to the right
+                      kart.position.y += 0.05;
+                  }
+                  else {
+                      // Swap directions to move left
+                      direction = false;
+                  }
+
+                  // Check if box is moving down
+                  if (kart.position.y > 4 && !direction) {
+                      // Decrement box position to the left
+                      kart.position.y -= 0.05;
+                  }
+                  else {
+                      // Swap directions to move right
+                      direction = true;
+                  }
+              });
+
           /******* Materials ******/
 
           // Colors
@@ -104,7 +134,8 @@
           // createCameraForward(-300,-300);
           // createCameraDown(-130,-400);
           // createArcCamera(0,0);
-          createButtonsCamera();
+          // createButtonsCamera();
+          createKartCamera();
 
           // Camera Looking Forward
           function createCameraForward(x,z) {
@@ -128,6 +159,11 @@
           function createButtonsCamera() {
             var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-703,300,-703), scene);
             camera.setTarget(new BABYLON.Vector3(-700,300,-700));
+          }
+          // Kart Camera
+          function createKartCamera() {
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 30, kart, scene);
+            camera.attachControl(canvas, true);
           }
 
           /******* Add Lights ******/
@@ -345,7 +381,6 @@
                 createBoxLine("blueBox",(-204+i),(-180+i),-364,'x');
                 createBoxLine("redBox",-340,-364,(-172+i),'z');
                 createBoxLine("greenBox",(-164+i),(-140+i),-340,'x');
-                console.log(i);
               }
             }
             function createFatBox() {
@@ -406,7 +441,6 @@
               tree.position.z = Math.random() * (330 + 320) - 320;
               tree.isPickable = true;
               tree.size = 50;
-              console.log(Math.random());
             }
             // Trees in fat side box
             for (var i = 0; i < 5; i++) {
@@ -416,7 +450,6 @@
               tree.position.z = Math.random() * (500 - 300) + 300;
               tree.isPickable = true;
               tree.size = 50;
-              console.log(Math.random());
             }
             // Trees in positive box
             for (var i = 0; i < 5; i++) {
@@ -426,7 +459,6 @@
               tree.position.z = Math.random() * (310 - 170) + 170;
               tree.isPickable = true;
               tree.size = 50;
-              console.log(Math.random());
             }
             // Trees in skinny side box
             for (var i = 0; i < 5; i++) {
@@ -436,7 +468,6 @@
               tree.position.z = Math.random() * (20 + 30) - 30;
               tree.isPickable = true;
               tree.size = 50;
-              console.log(Math.random());
             }
             // Trees in skinny middle box
             for (var i = 0; i < 5; i++) {
@@ -446,7 +477,6 @@
               tree.position.z = Math.random() * (-240 + 290) - 290;
               tree.isPickable = true;
               tree.size = 50;
-              console.log(Math.random());
             }
           }
 
@@ -685,7 +715,6 @@
           function createQuestionBox(x,z) {
             var box = BABYLON.MeshBuilder.CreateBox("box", {size: 4}, scene);
             box.position = new BABYLON.Vector3(x,(Math.random() * (5.9 - 4.1) + 4.1),z);
-            console.log(Math.random() * Math.PI);
             box.material = questionMaterial;
             var direction = true;
             scene.registerBeforeRender(function () {
@@ -820,6 +849,8 @@
               emissiveFlag = true;
             }
           }
+
+          /******* Adding Kart ******/
 
           // X Y Z Axis
           function setupOrientationLines() {
