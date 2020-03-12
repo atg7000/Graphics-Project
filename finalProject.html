@@ -44,7 +44,50 @@
 
     <script>
         var canvas = document.getElementById("renderCanvas"); // Get the canvas element
-        var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+        var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true }); // Generate the BABYLON 3D engine
+
+        /******* Create Class for the drivable Kart ******/
+        class DrivingKart {
+            constructor() {
+                this.power = 30;
+                this.speed = new BABYLON.Vector3();
+                this.maxSpeed = 120;
+                this.turnSpeed = 0;
+                this.maxTurnSpeed = 2;
+                this.turnAcceleration = 40;
+                this.body = BABYLON.Mesh.CreateSphere("kartBody", 16, 4, scene);
+                this.body.position = new BABYLON.Vector3(-432, 2, 60);
+                this.body.rotationQuaternion = new BABYLON.Quaternion();
+            }
+            update(inputMap, deltaTime) {
+                if (inputMap["w"] || inputMap["ArrowUp"]) {
+                    this.speed.z += this.power * deltaTime;
+                }
+                if (inputMap["s"] || inputMap["ArrowDown"]) {
+                    this.speed.set(0, 0, 0);
+                }
+                if (inputMap["d"] || inputMap["ArrowRight"]) {
+                    this.turnSpeed += this.turnAcceleration * deltaTime;
+                    this.body.rotationQuaternion.multiplyInPlace(BABYLON.Quaternion.RotationAxis(new BABYLON.Vector3(0, 1, 0), this.turnSpeed * deltaTime));
+                }
+                if (inputMap["a"] || inputMap["ArrowLeft"]) {
+                    this.turnSpeed -= this.turnAcceleration * deltaTime;
+                    this.body.rotationQuaternion.multiplyInPlace(BABYLON.Quaternion.RotationAxis(new BABYLON.Vector3(0, 1, 0), this.turnSpeed * deltaTime));
+                }
+                if (!(inputMap["d"] || inputMap["ArrowRight"]) && !(inputMap["a"] || inputMap["ArrowLeft"])) {
+                    this.turnSpeed = 0;
+                }
+                if (Math.abs(this.turnSpeed) > this.maxTurnSpeed) {
+                    this.turnSpeed = BABYLON.Scalar.Sign(this.turnSpeed) * this.maxTurnSpeed;
+                }
+                if (this.speed.length() > this.maxSpeed) {
+                    this.speed.normalize().scaleInPlace(this.maxSpeed);
+                }
+                var mat = new BABYLON.Matrix();
+                this.body.rotationQuaternion.toRotationMatrix(mat);
+                this.body.position.addInPlace(BABYLON.Vector3.TransformCoordinates(this.speed.scale(deltaTime), mat));
+            }
+        }
 
         /******* Add the create scene function ******/
         var createScene = function () {
@@ -61,6 +104,7 @@
           var kart = BABYLON.MeshBuilder.CreateBox("kart", {size: 6}, scene);
           kart.material = kartMaterial;
           kart.position = new BABYLON.Vector3(-432,3,84);
+          kart.isVisible = false;
 
           /******* Materials ******/
 
@@ -108,12 +152,13 @@
           questionMaterial.diffuseTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/questionBox.png", scene);
 
           /******* Creating Cameras ******/
-          var forwardCamera, downCamera, arcCamera, buttonCamera, kartCamera;
+          var forwardCamera, downCamera, arcCamera, buttonCamera, simKartCamera, driveCamera;
           createCameraForward(-300,-300);
           createCameraDown(-438,78);
           createArcCamera(0,0);
           createButtonsCamera();
-          createKartCamera();
+          createSimKartCamera();
+          createDriveCamera();
 
           // Camera Looking Forward
           function createCameraForward(x,z) {
@@ -139,11 +184,16 @@
             buttonCamera.setTarget(new BABYLON.Vector3(-700,300,-700));
           }
           // Kart Camera
-          function createKartCamera() {
-            kartCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 50, kart, scene);
-            kartCamera.attachControl(canvas, true);
-            kartCamera.position.copyFrom(kart.position.subtract(kart.forward.scale(5)).add(new BABYLON.Vector3(0,1.6,0)))
-            kartCamera.setTarget(kart.position)
+          function createSimKartCamera() {
+            simKartCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 50, kart, scene);
+            simKartCamera.attachControl(canvas, true);
+            simKartCamera.position.copyFrom(kart.position.subtract(kart.forward.scale(5)).add(new BABYLON.Vector3(0,1.6,0)))
+            simKartCamera.setTarget(kart.position)
+          }
+          function createDriveCamera() {
+            driveCamera = new BABYLON.FreeCamera("driveCamera", new BABYLON.Vector3(0, 5, -10), scene);
+            driveCamera.setTarget(BABYLON.Vector3.Zero());
+            driveCamera.attachControl(canvas, true);
           }
           scene.activeCamera = buttonCamera;
 
@@ -583,65 +633,65 @@
             negativeZCoins();
             function positiveZCoins() {
               // 1-3
-              createCoin(-412,5,188);
-              createCoin(-428,5,188);
-              createCoin(-445,5,188);
+              createCoin(-412,4,188);
+              createCoin(-428,4,188);
+              createCoin(-445,4,188);
               // 4-6
-              createCoin(-405,5,420);
-              createCoin(-389,5,405);
-              createCoin(-373,5,389);
+              createCoin(-405,4,420);
+              createCoin(-389,4,405);
+              createCoin(-373,4,389);
               // 7-9
-              createCoin(-301,5,451);
-              createCoin(-301,5,436);
-              createCoin(-301,5,420);
+              createCoin(-301,4,451);
+              createCoin(-301,4,436);
+              createCoin(-301,4,420);
               // 10-12
-              createCoin(92,5,236);
-              createCoin(107,5,221);
-              createCoin(123,5,205);
+              createCoin(92,4,236);
+              createCoin(107,4,221);
+              createCoin(123,4,205);
               // 13-15
-              createCoin(404,5,164);
-              createCoin(388,5,133);
-              createCoin(357,5,118);
+              createCoin(404,4,164);
+              createCoin(388,4,133);
+              createCoin(357,4,118);
             }
             function middleCoins() {
               // 16-20
-              createCoin(-69,5,-13);
-              createCoin(-85,5,-28);
-              createCoin(-100,5,-44);
-              createCoin(-108,5,-60);
-              createCoin(-108,5,-75);
+              createCoin(-69,4,-13);
+              createCoin(-85,4,-28);
+              createCoin(-100,4,-44);
+              createCoin(-108,4,-60);
+              createCoin(-108,4,-75);
               // 21-24
-              createCoin(-108,5,-91);
-              createCoin(-100,5,-107);
-              createCoin(-85,5,-122);
-              createCoin(-69,5,-138);
+              createCoin(-108,4,-91);
+              createCoin(-100,4,-107);
+              createCoin(-85,4,-122);
+              createCoin(-69,4,-138);
               // 25-29
-              createCoin(-93,5,-75);
-              createCoin(-124,5,-75);
-              createCoin(-140,5,-75);
-              createCoin(-155,5,-75);
-              createCoin(-170,5,-75);
+              createCoin(-93,4,-75);
+              createCoin(-124,4,-75);
+              createCoin(-140,4,-75);
+              createCoin(-155,4,-75);
+              createCoin(-170,4,-75);
               // 30-31
-              createCoin(-155,5,-91);
-              createCoin(-155,5,-60);
+              createCoin(-155,4,-91);
+              createCoin(-155,4,-60);
             }
             function negativeZCoins() {
               // 32-34
-              createCoin(149,5,-107);
-              createCoin(149,5,-123);
-              createCoin(149,5,-139);
+              createCoin(149,4,-107);
+              createCoin(149,4,-123);
+              createCoin(149,4,-139);
               // 35-37
-              createCoin(274,5,-107);
-              createCoin(274,5,-123);
-              createCoin(274,5,-139);
+              createCoin(274,4,-107);
+              createCoin(274,4,-123);
+              createCoin(274,4,-139);
               // 38-40
-              createCoin(107,5,-307);
-              createCoin(91,5,-323);
-              createCoin(75,5,-339);
+              createCoin(107,4,-307);
+              createCoin(91,4,-323);
+              createCoin(75,4,-339);
               // 41-43
-              createCoin(-27,5,-331);
-              createCoin(-42,5,-315);
-              createCoin(-58,5,-300);
+              createCoin(-27,4,-331);
+              createCoin(-42,4,-315);
+              createCoin(-58,4,-300);
             }
             function createCoin(x,y,z) {
                 var fountain = BABYLON.MeshBuilder.CreateSphere("fountain", {diameter: 3}, scene);
@@ -889,8 +939,8 @@
 
               moveKart.setKeys(moveKart_keys);
               scene.beginDirectAnimation(kart, [moveKart], 0, kartFrames * 5000, false, 1, function () {
-                  console.log("It Gets here");
                   scene.activeCamera = buttonCamera;
+                  kart.isVisible = false;
               });
             }
 
@@ -940,10 +990,13 @@
             // Adding control to buttons
             button1.onPointerClickObservable.add(() => {
               console.log("Pressed Button 1");
+              scene.activeCamera = driveCamera;
+              driveKart();
             });
             button2.onPointerClickObservable.add(() => {
               console.log("Pressed Button 2");
-              scene.activeCamera = kartCamera;
+              kart.isVisible = true;
+              scene.activeCamera = simKartCamera;
               animateKart();
               // scene.activeCamera = buttonCamera;
             });
@@ -995,8 +1048,25 @@
           }
 
           /******* DRIVING KART ******/
-          
-
+          function driveKart() {
+            var drivingKart = new DrivingKart();
+            // Keyboard events
+            var inputMap = {};
+            scene.actionManager = new BABYLON.ActionManager(scene);
+            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
+                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+            }));
+            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
+                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+            }));
+            // Game/Render loop
+            scene.onBeforeRenderObservable.add(() => {
+                drivingKart.update(inputMap, scene.getEngine().getDeltaTime() / 1000);
+                drivingKart.body.computeWorldMatrix(true);
+                driveCamera.position.copyFrom(drivingKart.body.position.subtract(drivingKart.body.forward.scale(25)).add(new BABYLON.Vector3(0, 6, 0)));
+                driveCamera.setTarget(drivingKart.body.position);
+            });
+          }
 
           // X Y Z Axis
           function setupOrientationLines() {
