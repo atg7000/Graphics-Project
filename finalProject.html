@@ -86,7 +86,6 @@
                 }
                 var mat = new BABYLON.Matrix();
                 this.body.rotationQuaternion.toRotationMatrix(mat);
-                // this.body.position.addInPlace(BABYLON.Vector3.TransformCoordinates(this.speed.scale(deltaTime), mat));
                 var newPosition = BABYLON.Vector3.TransformCoordinates(this.speed.scale(deltaTime), mat);
                 this.body.moveWithCollisions(newPosition);
             }
@@ -276,7 +275,6 @@
                     eval('var ' + boxName + ' = ' + 'BABYLON.MeshBuilder.CreateBox("' + boxColorName + '", {size: 8.0}, scene);');
                     eval(boxName + '.position = new BABYLON.Vector3(' + x + ',' + y + ',' + z + ');');
                     eval(boxName + '.material = ' + boxColorTexture);
-                    eval(boxName + '.ellipsoid = new BABYLON.Vector3(4, 4, 4);')
                     eval(boxName + '.checkCollisions = true;');
                   }
                 }
@@ -524,10 +522,12 @@
               var finishBoxLeft = BABYLON.MeshBuilder.CreateBox("finishBoxLeft", {height: 80, width: 8, depth: 8}, scene);
               finishBoxLeft.position = new BABYLON.Vector3(-476,40,84);
               finishBoxLeft.material = redMaterial;
+              finishBoxLeft.checkCollisions = true;
               // Create Right Pillar
               var finishBoxRight = BABYLON.MeshBuilder.CreateBox("finishBoxRight",{height: 80, width: 8, depth: 8}, scene);
               finishBoxRight.position = new BABYLON.Vector3(-388,40,84);
               finishBoxRight.material = greenMaterial;
+              finishBoxRight.checkCollisions = true;
               // Create Top Pillar
               var finishBannerTop = BABYLON.MeshBuilder.CreateBox("finishBannerTop", {height: 4, width: 80, depth: 4}, scene);
               finishBannerTop.position = new BABYLON.Vector3(-432,78,84);
@@ -589,11 +589,15 @@
                   box.material = mat;
                   box.position = new BABYLON.Vector3(x,y,z);
                   box.rotation = new BABYLON.Vector3(0, Math.PI*3/2, 0);
+                  box.checkCollisions = true;
                 }
               }
-
+              var frameNumber = 0;
              scene.registerBeforeRender(function() {
-            	 texture.uOffset += 1/7;
+               if (++frameNumber % 10 == 0) {
+            	    texture.uOffset += 1/7;
+               }
+
              });
            }
            function createBleachers() {
@@ -607,6 +611,9 @@
              var bleacherBoxShortLeft = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortLeft", {height: 8, width: 3, depth: 3}, scene);
              bleacherBoxShortLeft.position = new BABYLON.Vector3(-480,4,128.5);
              bleacherBoxShortLeft.material = yellowMaterial;
+             bleacherBoxTallLeft.checkCollisions = true;
+             bleacherBoxMediumLeft.checkCollisions = true;
+             bleacherBoxShortLeft.checkCollisions = true;
 
              // Right Bleachers
              var bleacherBoxTallRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 24, width: 3, depth: 3}, scene);
@@ -618,6 +625,9 @@
              var bleacherBoxShortRight = BABYLON.MeshBuilder.CreateBox("bleacherBoxShortRight", {height: 8, width: 3, depth: 3}, scene);
              bleacherBoxShortRight.position = new BABYLON.Vector3(-480,4,179.5);
              bleacherBoxShortRight.material = yellowMaterial;
+             bleacherBoxTallRight.checkCollisions = true;
+             bleacherBoxMediumRight.checkCollisions = true;
+             bleacherBoxShortRight.checkCollisions = true;
 
              // Top of Bleacher
              var bleacherBoxTop = BABYLON.MeshBuilder.CreateBox("bleacherBoxTallRight", {height: 3, width: 54, depth: 3}, scene);
@@ -1059,7 +1069,7 @@
           /******* DRIVING KART ******/
           function driveKart() {
             var tempKart = BABYLON.Mesh.CreateSphere("kartBody", 16, 4, scene)
-            tempKart.ellipsoid = new BABYLON.Vector3(10, 10, 10);
+            // tempKart.ellipsoid = new BABYLON.Vector3(10, 10, 10);
             tempKart.checkCollisions = true;
             var drivingKart = new DrivingKart(kartMaterial, tempKart);
             createShadows(drivingKart.body);
