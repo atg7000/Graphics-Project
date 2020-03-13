@@ -109,6 +109,11 @@
           kart.position = new BABYLON.Vector3(-432,3,84);
           kart.isVisible = false;
 
+          /******* Array for touchable Items ******/
+          var allCoins = [];
+          var allQuestions = [];
+          var allParticles = [];
+
           /******* Materials ******/
 
           // Colors
@@ -594,7 +599,7 @@
               }
               var frameNumber = 0;
              scene.registerBeforeRender(function() {
-               if (++frameNumber % 10 == 0) {
+               if (++frameNumber % 7 == 0) {
             	    texture.uOffset += 1/7;
                }
 
@@ -706,25 +711,41 @@
               createCoin(-58,4,-300);
             }
             function createCoin(x,y,z) {
-                var fountain = BABYLON.MeshBuilder.CreateSphere("fountain", {diameter: 3}, scene);
+                // Naming
+                var coinName = "coin";
+                var particleName = "particle";
+                var xName = x.toString();
+                xName = xName.replace("-","Negative");
+                var yName = y.toString();
+                yName = yName.replace("-","Negative");
+                var zName = z.toString();
+                zName = zName.replace("-","Negative");
+                coinName = coinName.concat(xName,"_",yName,"_",zName);
+                particleName = particleName.concat(xName,"_",yName,"_",zName);
+                var coinLength = allCoins.length;
+                var particleLength = allParticles.length;
+                allCoins[coinLength] = coinName;
+                allParticles[particleLength] = particleName;
+
+                eval('var ' + coinName + ' = BABYLON.MeshBuilder.CreateSphere("' + coinName + '", {diameter: 3}, scene);');
                 var fountainMaterial = new BABYLON.StandardMaterial("fountainMaterial", scene);
                 fountainMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
                 fountainMaterial.alpha = 0.5;
-                fountain.material = fountainMaterial;
-                fountain.position = new BABYLON.Vector3(x,y,z);
-                var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
-                particleSystem.particleTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/particle.png", scene);
-                particleSystem.emitter = fountain; // the starting object, the emitter
-                particleSystem.minSize = 1;
-                particleSystem.maxSize = 3;
-                particleSystem.minEmitBox = new BABYLON.Vector3(-2, -1, -2);
-                particleSystem.maxEmitBox = new BABYLON.Vector3(2, 1, 2);
-                particleSystem.minLifeTime = 0.3;
-                particleSystem.maxLifeTime = 1.5;
-                particleSystem.emitRate = 50;
-                particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-                particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
-                particleSystem.start();
+                eval(coinName + '.material = fountainMaterial;');
+                eval(coinName + '.position = new BABYLON.Vector3(x,y,z);');
+                eval('var ' + particleName + '= new BABYLON.ParticleSystem("' + particleName + '", 2000, scene);');
+                eval(particleName + '.particleTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/particle.png", scene);');
+                eval(particleName + '.emitter = ' + coinName + ';'); // the starting object, the emitter
+                eval(particleName + '.minSize = 1;');
+                eval(particleName + '.maxSize = 3;');
+                eval(particleName + '.minEmitBox = new BABYLON.Vector3(-2, -1, -2);');
+                eval(particleName + '.maxEmitBox = new BABYLON.Vector3(2, 1, 2);');
+                eval(particleName + '.minLifeTime = 0.3;');
+                eval(particleName + '.maxLifeTime = 1.5;');
+                eval(particleName + '.emitRate = 50;');
+                eval(particleName + '.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;');
+                eval(particleName + '.gravity = new BABYLON.Vector3(0, -9.81, 0);');
+                eval(particleName + '.start();');
             }
           }
 
@@ -757,19 +778,32 @@
             createQuestionBox(-149,-401);
           }
           function createQuestionBox(x,z) {
-            var box = BABYLON.MeshBuilder.CreateBox("box", {size: 4}, scene);
-            box.position = new BABYLON.Vector3(x,(Math.random() * (5.9 - 4.1) + 4.1),z);
-            box.material = questionMaterial;
+            // Naming
+            var questionName = "question";
+            var xName = x.toString();
+            xName = xName.replace("-","Negative");
+            var zName = z.toString();
+            zName = zName.replace("-","Negative");
+            questionName = questionName.concat(xName,"_",zName);
+            var questionLength = allQuestions.length;
+            allQuestions[questionLength] = questionName;
+
+            // Create box
+            eval('var ' + questionName + ' = BABYLON.MeshBuilder.CreateBox("' + questionName + '", {size: 4}, scene);');
+            eval(questionName + '.position = new BABYLON.Vector3(x,(Math.random() * (5.9 - 4.1) + 4.1),z);');
+            eval(questionName + '.material = questionMaterial;');
             var direction = true;
+
+            // Animation
             scene.registerBeforeRender(function () {
                     // Check if box is moving up
                     let time = new Date().getTime();
-                    // box.rotation.x = time / 400 % 8;
-                    box.rotation.z = time / 700 % 8;
-                    box.rotation.y = time / 700 % 8;
-                    if (box.position.y < 6 && direction) {
+                    eval(questionName + '.rotation.z = time / 700 % 8;');
+                    eval(questionName + '.rotation.y = time / 700 % 8;');
+                    eval('var boxPosition = ' + questionName + '.position.y;');
+                    if (boxPosition < 6 && direction) {
                         // Increment box position to the right
-                        box.position.y += 0.05;
+                        eval(questionName + '.position.y += 0.05;');
                     }
                     else {
                         // Swap directions to move left
@@ -777,9 +811,9 @@
                     }
 
                     // Check if box is moving down
-                    if (box.position.y > 4 && !direction) {
+                    if (boxPosition > 4 && !direction) {
                         // Decrement box position to the left
-                        box.position.y -= 0.05;
+                        eval(questionName + '.position.y -= 0.05;');
                     }
                     else {
                         // Swap directions to move right
@@ -796,7 +830,7 @@
           }
 
           /******* Create Music ******/
-          addMusic();
+          // addMusic();
           function addMusic() {
             var music = new BABYLON.Sound("Music", "file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/music.mp3", scene, null, {
                                           loop: true,
@@ -1091,6 +1125,13 @@
                 driveCamera.position.copyFrom(drivingKart.body.position.subtract(drivingKart.body.forward.scale(25)).add(new BABYLON.Vector3(0, 6, 0)));
                 driveCamera.setTarget(drivingKart.body.position);
             });
+            for (let i = 0; i < allCoins.length; i++) {
+              console.log(allCoins[i]);
+              console.log(allParticles[i]);
+            }
+            for (let i = 0; i < allQuestions.length; i++) {
+              console.log(allQuestions[i]);
+            }
           }
 
           // X Y Z Axis
