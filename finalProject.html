@@ -727,13 +727,13 @@
                 allCoins[coinLength] = coinName;
                 allParticles[particleLength] = particleName;
 
-                eval('var ' + coinName + ' = BABYLON.MeshBuilder.CreateSphere("' + coinName + '", {diameter: 3}, scene);');
+                eval(coinName + ' = BABYLON.MeshBuilder.CreateSphere("' + coinName + '", {diameter: 3}, scene);');
                 var fountainMaterial = new BABYLON.StandardMaterial("fountainMaterial", scene);
                 fountainMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
                 fountainMaterial.alpha = 0.5;
                 eval(coinName + '.material = fountainMaterial;');
                 eval(coinName + '.position = new BABYLON.Vector3(x,y,z);');
-                eval('var ' + particleName + '= new BABYLON.ParticleSystem("' + particleName + '", 2000, scene);');
+                eval(particleName + '= new BABYLON.ParticleSystem("' + particleName + '", 2000, scene);');
                 eval(particleName + '.particleTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/particle.png", scene);');
                 eval(particleName + '.emitter = ' + coinName + ';'); // the starting object, the emitter
                 eval(particleName + '.minSize = 1;');
@@ -789,7 +789,7 @@
             allQuestions[questionLength] = questionName;
 
             // Create box
-            eval('var ' + questionName + ' = BABYLON.MeshBuilder.CreateBox("' + questionName + '", {size: 4}, scene);');
+            eval(questionName + ' = BABYLON.MeshBuilder.CreateBox("' + questionName + '", {size: 4}, scene);');
             eval(questionName + '.position = new BABYLON.Vector3(x,(Math.random() * (5.9 - 4.1) + 4.1),z);');
             eval(questionName + '.material = questionMaterial;');
             var direction = true;
@@ -1126,12 +1126,29 @@
                 driveCamera.setTarget(drivingKart.body.position);
             });
             for (let i = 0; i < allCoins.length; i++) {
-              console.log(allCoins[i]);
-              console.log(allParticles[i]);
+              var name = allCoins[i];
+              var name2 = allParticles[i];
+              eval(name + '.actionManager = new BABYLON.ActionManager(scene);');
+              eval(name + '.actionManager.registerAction(new BABYLON.ExecuteCodeAction({trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,parameter: {mesh: tempKart,usePreciseIntersection: true}},function () {' + name2 + '.stop();' + name + '.isVisible = false;}));');
             }
             for (let i = 0; i < allQuestions.length; i++) {
-              console.log(allQuestions[i]);
+              var name = allQuestions[i];
+              eval(name + '.actionManager = new BABYLON.ActionManager(scene);');
+              eval(name + '.actionManager.registerAction(new BABYLON.ExecuteCodeAction({trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,parameter: {mesh: tempKart,usePreciseIntersection: true}},function () {' + name + '.isVisible = false;}));');
             }
+
+            // mesh.actionManager.registerAction(
+            //   new BABYLON.ExecuteCodeAction(
+            //     {
+            //       trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+            //       parameter: {
+            //         mesh: tempKart,
+            //         usePreciseIntersection: true
+            //       }
+            //     },
+            //     function () { console.log('r button was pressed'); }
+            //   )
+            // );
           }
 
           // X Y Z Axis
