@@ -48,7 +48,8 @@
 
         /******* Create Class for the drivable Kart ******/
         class DrivingKart {
-            constructor(material,mesh) {
+            constructor(material,mesh,returnCamera) {
+                // Setting object attributes
                 this.power = 30;
                 this.speed = new BABYLON.Vector3();
                 this.maxSpeed = 120;
@@ -56,11 +57,17 @@
                 this.maxTurnSpeed = 2;
                 this.turnAcceleration = 40;
                 this.body = mesh;
+                this.camera = returnCamera;
                 this.body.position = new BABYLON.Vector3(-432, 2, 60);
                 this.body.rotationQuaternion = new BABYLON.Quaternion();
                 this.body.material = material;
             }
+            // For moving the Kart
             update(inputMap, deltaTime) {
+                if (inputMap["q"]) {
+                  scene.activeCamera = this.camera;
+                  scene.removeMesh(this.body);
+                }
                 if (inputMap["w"] || inputMap["ArrowUp"]) {
                     this.speed.z += this.power * deltaTime;
                 }
@@ -139,8 +146,6 @@
           // Ground Material
           var groundMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
           groundMaterial.ambientTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
-          //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.hpgreenvivarium.com/wp-content/uploads/2020/02/marioKartTrack.png", scene);
-          //groundMaterial.ambientTexture = new BABYLON.Texture("http://www.mariouniverse.com/wp-content/img/maps/snes/smk/mariocircuit-3.png", scene);
           //groundMaterial.ambientTexture = new BABYLON.Texture("file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/marioKartTrack.png", scene);
 
           // SkyBox material
@@ -162,26 +167,11 @@
           questionMaterial.diffuseTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/questionBox.png", scene);
 
           /******* Creating Cameras ******/
-          var forwardCamera, arcCamera, buttonCamera, simKartCamera, driveCamera;
-          createCameraForward(-300,-300);
-          createArcCamera(0,0);
+          var buttonCamera, simKartCamera, driveCamera;
           createButtonsCamera();
           createSimKartCamera();
           createDriveCamera();
 
-          // Camera Looking Forward
-          function createCameraForward(x,z) {
-            forwardCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(x,100,z), scene);
-            forwardCamera.attachControl(canvas, true);
-            forwardCamera.speed = 25;
-            forwardCamera.ellipsoid = new BABYLON.Vector3(20, 20, 20);
-            forwardCamera.checkCollisions = true;
-          }
-          // Arc Rotate Camera
-          function createArcCamera(x,z) {
-            arcCamera = new BABYLON.ArcRotateCamera("Camera", 0, (Math.PI / 4), 500, new BABYLON.Vector3(x,1,z), scene);
-            arcCamera.attachControl(canvas, true);
-          }
           // Buttons Camera
           function createButtonsCamera() {
             buttonCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-703,300,-703), scene);
@@ -203,10 +193,11 @@
             driveCamera.setTarget(BABYLON.Vector3.Zero());
             driveCamera.attachControl(canvas, true);
           }
+
+          // Set starting camera for scene
           scene.activeCamera = buttonCamera;
 
           /******* Add Lights ******/
-          // Lights
           var hemiLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
           var pointLight = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(600, 300, 400), scene);
           // Sun
@@ -221,13 +212,13 @@
           function createGround() {
             var myGround = BABYLON.MeshBuilder.CreateGround("myGround", {width: 1024, height: 1024}, scene);
             myGround.material = groundMaterial;
+            // Set ground to receive shadows
             myGround.receiveShadows = true;
           }
 
           /******* Creating Wall Blocks ******/
           createWalls();
           function createBoxLine(startBox,startPosition,endPosition,constPosition,constAxis) {
-
             // Setting variables
             var x = 0, y = 4, z = 0;
             var offset = 32;
@@ -253,7 +244,7 @@
               z = constPosition;
             }
 
-            // temp fix
+            // Depending on what direction the boxes are going
             if(direction) {
               // loop for box color
               for (let a = 0; a < 4; a++) {
@@ -468,7 +459,6 @@
           /******* Trees ******/
           createTrees();
           function createTrees() {
-            //var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "file:///C:/Users/atg20/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             var spriteManagerTrees = new BABYLON.SpriteManager("treesManager","file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/tree.png", 2000, {width: 320, height: 555}, scene);
             // Trees in long rectangle
             for (var i = 0; i < 10; i++) {
@@ -562,12 +552,12 @@
             createPeople();
             createBleachers();
             function createPeople() {
+              // Start making sprite texture
               var mat = new BABYLON.StandardMaterial("mat1", scene);
               mat.alpha = 1.0;
               mat.diffuseColor = new BABYLON.Color3(1, 1, 1);
               mat.specularColor = new BABYLON.Color3(1, 1, 1);
               mat.ambientColor = new BABYLON.Color3(1, 1, 1);
-              //mat.backFaceCulling = false;
               var texture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/man.png", scene);
               mat.diffuseTexture = texture;
 
@@ -579,18 +569,11 @@
               for (var i = 0; i < 6; i++) {
             	  faceUV[i] = new BABYLON.Vector4(0, 0, 0, 0);
               }
-
               faceUV[1] = new BABYLON.Vector4(0, 0, 1 / hSpriteNb, 1 / vSpriteNb);
 
-              var options = {
-                width: 6,
-                height: 8,
-                depth: 3,
-                faceUV: faceUV
-              };
               for(let x = -480, y = 4; x >= -486; x -=3, y +=8) {
                 for(let z = 133; z <= 175; z += 6) {
-                  var box = BABYLON.MeshBuilder.CreateBox('box', options, scene);
+                  var box = BABYLON.MeshBuilder.CreateBox('box', {width: 6, height: 8, depth: 3, faceUV: faceUV}, scene);
                   box.material = mat;
                   box.position = new BABYLON.Vector3(x,y,z);
                   box.rotation = new BABYLON.Vector3(0, Math.PI*3/2, 0);
@@ -602,7 +585,6 @@
                if (++frameNumber % 7 == 0) {
             	    texture.uOffset += 1/7;
                }
-
              });
            }
            function createBleachers() {
@@ -727,12 +709,15 @@
                 allCoins[coinLength] = coinName;
                 allParticles[particleLength] = particleName;
 
+                // Create the fountain
                 eval(coinName + ' = BABYLON.MeshBuilder.CreateSphere("' + coinName + '", {diameter: 3}, scene);');
                 var fountainMaterial = new BABYLON.StandardMaterial("fountainMaterial", scene);
                 fountainMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
                 fountainMaterial.alpha = 0.5;
                 eval(coinName + '.material = fountainMaterial;');
                 eval(coinName + '.position = new BABYLON.Vector3(x,y,z);');
+
+                // Create the particles
                 eval(particleName + '= new BABYLON.ParticleSystem("' + particleName + '", 2000, scene);');
                 eval(particleName + '.particleTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/particle.png", scene);');
                 eval(particleName + '.emitter = ' + coinName + ';'); // the starting object, the emitter
@@ -830,7 +815,7 @@
           }
 
           /******* Create Music ******/
-          // addMusic();
+          addMusic();
           function addMusic() {
             var music = new BABYLON.Sound("Music", "file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/music.mp3", scene, null, {
                                           loop: true,
@@ -840,6 +825,7 @@
 
           /******* Kart Animation ******/
           function animateKart() {
+            // Start with creating the animation manager
             var kartFrames = 200;
             var moveKart = new BABYLON.Animation("moveKart", "position", kartFrames, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
           	var moveKart_keys = [];
@@ -990,6 +976,7 @@
                   value: new BABYLON.Vector3(-432, 3, 100)
               });
 
+              // Put the keys with the manager
               moveKart.setKeys(moveKart_keys);
               createShadows(kart);
               scene.beginDirectAnimation(kart, [moveKart], 0, kartFrames * 5000, false, 1, function () {
@@ -1042,16 +1029,42 @@
             button3.content = buttonText3;
 
             // Adding control to buttons
+
+            // Race Button
             button1.onPointerClickObservable.add(() => {
+              // Make sure all the coins are visible
+              for (let i = 0; i < allCoins.length; i++) {
+                var name = allCoins[i];
+                var name2 = allParticles[i];
+                eval(name + '.isVisible = true;');
+                eval(name2 + '.start();');
+              }
+              // Make sure all question boxes are visible
+              for (let i = 0; i < allQuestions.length; i++) {
+                var name = allQuestions[i];
+                eval(name + '.isVisible = true;');
+              }
               scene.activeCamera = driveCamera;
               driveKart();
             });
+            // Simulated Race Button
             button2.onPointerClickObservable.add(() => {
               kart.isVisible = true;
               scene.activeCamera = simKartCamera;
               animateKart();
-              // scene.activeCamera = buttonCamera;
+              for (let i = 0; i < allCoins.length; i++) {
+                var name = allCoins[i];
+                var name2 = allParticles[i];
+                eval(name + '.isVisible = true;');
+                eval(name2 + '.start();');
+              }
+              // Make sure all question boxes are visible
+              for (let i = 0; i < allQuestions.length; i++) {
+                var name = allQuestions[i];
+                eval(name + '.isVisible = true;');
+              }
             });
+            // Black/Lights Button
             button3.onPointerClickObservable.add(() => {
               changeLights();
             });
@@ -1102,10 +1115,10 @@
 
           /******* DRIVING KART ******/
           function driveKart() {
-            var tempKart = BABYLON.Mesh.CreateSphere("kartBody", 16, 4, scene)
-            // tempKart.ellipsoid = new BABYLON.Vector3(10, 10, 10);
+            // Create the Kart to drive
+            var tempKart = BABYLON.Mesh.CreateSphere("kartBody", 16, 4, scene);
             tempKart.checkCollisions = true;
-            var drivingKart = new DrivingKart(kartMaterial, tempKart);
+            var drivingKart = new DrivingKart(kartMaterial, tempKart,buttonCamera);
             createShadows(drivingKart.body);
             // Keyboard events
             var inputMap = {};
@@ -1116,11 +1129,11 @@
             scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
                 inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
             }));
-            // Game/Render loop
+            // Render loop
             scene.onBeforeRenderObservable.add(() => {
                 drivingKart.update(inputMap, scene.getEngine().getDeltaTime() / 1000);
                 drivingKart.body.computeWorldMatrix(true);
-                drivingKart.body.ellipsoid = new BABYLON.Vector3(20, 20, 20);
+                drivingKart.body.ellipsoid = new BABYLON.Vector3(5, 5, 5);
                 drivingKart.body.checkCollisions = true;
                 driveCamera.position.copyFrom(drivingKart.body.position.subtract(drivingKart.body.forward.scale(25)).add(new BABYLON.Vector3(0, 6, 0)));
                 driveCamera.setTarget(drivingKart.body.position);
@@ -1136,19 +1149,6 @@
               eval(name + '.actionManager = new BABYLON.ActionManager(scene);');
               eval(name + '.actionManager.registerAction(new BABYLON.ExecuteCodeAction({trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,parameter: {mesh: tempKart,usePreciseIntersection: true}},function () {' + name + '.isVisible = false;}));');
             }
-
-            // mesh.actionManager.registerAction(
-            //   new BABYLON.ExecuteCodeAction(
-            //     {
-            //       trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
-            //       parameter: {
-            //         mesh: tempKart,
-            //         usePreciseIntersection: true
-            //       }
-            //     },
-            //     function () { console.log('r button was pressed'); }
-            //   )
-            // );
           }
 
           // X Y Z Axis
@@ -1170,9 +1170,7 @@
               }, scene);
           }
           setupOrientationLines();
-          // help with sprites found here
-          // https://doc.babylonjs.com/how_to/createbox_per_face_textures_and_colors
-          // https://www.babylonjs-playground.com/#1V3CAT#171
+
         	return scene;
         };
         /******* End of the create scene function ******/
