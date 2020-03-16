@@ -171,7 +171,6 @@
           createButtonsCamera();
           createSimKartCamera();
           createDriveCamera();
-          createCameraForward();
 
           // Buttons Camera
           function createButtonsCamera() {
@@ -193,13 +192,6 @@
             driveCamera = new BABYLON.FreeCamera("driveCamera", new BABYLON.Vector3(0, 5, -10), scene);
             driveCamera.setTarget(BABYLON.Vector3.Zero());
             driveCamera.attachControl(canvas, true);
-          }
-          function createCameraForward() {
-             forwardCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(100,100,100), scene);
-             forwardCamera.attachControl(canvas, true);
-             forwardCamera.speed = 25;
-             forwardCamera.ellipsoid = new BABYLON.Vector3(20, 20, 20);
-             forwardCamera.checkCollisions = true;
           }
 
           // Set starting camera for scene
