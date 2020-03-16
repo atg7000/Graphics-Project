@@ -167,10 +167,11 @@
           questionMaterial.diffuseTexture = new BABYLON.Texture("file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/questionBox.png", scene);
 
           /******* Creating Cameras ******/
-          var buttonCamera, simKartCamera, driveCamera;
+          var buttonCamera, simKartCamera, driveCamera, forwardCamera;
           createButtonsCamera();
           createSimKartCamera();
           createDriveCamera();
+          createCameraForward();
 
           // Buttons Camera
           function createButtonsCamera() {
@@ -192,6 +193,13 @@
             driveCamera = new BABYLON.FreeCamera("driveCamera", new BABYLON.Vector3(0, 5, -10), scene);
             driveCamera.setTarget(BABYLON.Vector3.Zero());
             driveCamera.attachControl(canvas, true);
+          }
+          function createCameraForward() {
+             forwardCamera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(100,100,100), scene);
+             forwardCamera.attachControl(canvas, true);
+             forwardCamera.speed = 25;
+             forwardCamera.ellipsoid = new BABYLON.Vector3(20, 20, 20);
+             forwardCamera.checkCollisions = true;
           }
 
           // Set starting camera for scene
@@ -815,7 +823,7 @@
           }
 
           /******* Create Music ******/
-          // addMusic();
+          addMusic();
           function addMusic() {
             var music = new BABYLON.Sound("Music", "file:///Users/austingarner/Dropbox/School/2nd%20Quarter/Computer%20Graphics/Final%20Project/media/music.mp3", scene, null, {
                                           loop: true,
@@ -1150,26 +1158,6 @@
               eval(name + '.actionManager.registerAction(new BABYLON.ExecuteCodeAction({trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,parameter: {mesh: tempKart,usePreciseIntersection: true}},function () {' + name + '.isVisible = false;}));');
             }
           }
-
-          // X Y Z Axis
-          function setupOrientationLines() {
-              // red
-              let xLine = BABYLON.MeshBuilder.CreateLines("xLine", {
-                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(256, 0.01, 0) ],
-                  colors: [new BABYLON.Color4(1, 0, 0, 1), new BABYLON.Color4(1, 0, 0, 1)]
-              }, scene);
-              // green
-              let yLine = BABYLON.MeshBuilder.CreateLines("yLine", {
-                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(0, 256.01, 0) ],
-                  colors: [new BABYLON.Color4(0, 1, 0, 1), new BABYLON.Color4(0, 1, 0, 1)]
-              }, scene);
-              // blue
-              let zLine = BABYLON.MeshBuilder.CreateLines("zLine", {
-                  points: [ new BABYLON.Vector3(0, 0.01, 0), new BABYLON.Vector3(0, 0.01, 256) ],
-                  colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)]
-              }, scene);
-          }
-          setupOrientationLines();
 
         	return scene;
         };
